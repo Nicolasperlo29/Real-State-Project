@@ -1,0 +1,21 @@
+.properties-section {
+  margin-top: 100px;
+}
+.property-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 480px);
+  justify-content: center;
+  margin: 0 auto;
+  /* siempre 2 en 2 */
+  gap: 2.5rem;
+}
+
+
+
+@media (max-width: 768px) {
+  .property-grid {
+    grid-template-columns: 1fr;
+    /* 1 columna en móviles */
+    gap: 2rem;
+  }
+}
