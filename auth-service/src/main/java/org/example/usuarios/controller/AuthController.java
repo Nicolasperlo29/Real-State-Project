@@ -2,6 +2,7 @@ package org.example.usuarios.controller;
 
 import org.example.usuarios.DTOS.*;
 import org.example.usuarios.entity.AuthUserEntity;
+import org.example.usuarios.repository.AuthUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.example.usuarios.service.AuthService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,6 +20,9 @@ public class AuthController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private AuthUserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserDTO>> register(@RequestBody UserRequest request) {
@@ -45,7 +50,18 @@ public class AuthController {
         }
 
         String email = authentication.getName();
-        return ResponseEntity.ok(Map.of("email", email));
+        Optional<AuthUserEntity> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+        }
+
+        AuthUserEntity user = userOptional.get();
+        return ResponseEntity.ok(Map.of(
+                "id", user.getId(),
+                "fullname", user.getFullname(),
+                "email", user.getEmail()
+        ));
     }
 
 

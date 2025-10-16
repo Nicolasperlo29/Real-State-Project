@@ -4,7 +4,6 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-property-details',

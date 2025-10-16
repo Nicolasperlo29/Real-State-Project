@@ -11,14 +11,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   errorMessage: string = '';
 
   constructor(
     private fb: FormBuilder,
-    private authService: UserService  ,
+    private authService: UserService,
     private router: Router
   ) { }
 
@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit{
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
+      // rememberMe: [false]
     });
   }
 
@@ -47,5 +48,13 @@ export class LoginComponent implements OnInit{
         this.errorMessage = err.error || 'Error al iniciar sesión';
       }
     });
+  }
+
+  loginWithGoogle() {
+    // Implementar login con Google OAuth
+  }
+
+  loginWithFacebook() {
+    // Implementar login con Facebook OAuth
   }
 }

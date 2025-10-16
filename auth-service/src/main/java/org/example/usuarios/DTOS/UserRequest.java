@@ -7,6 +7,8 @@ import lombok.Data;
 
 @Data
 public class UserRequest {
+    @NotBlank(message = "El nombre es obligatorio")
+    private String fullname;
 
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "Email no válido")
@@ -15,4 +17,6 @@ public class UserRequest {
     @NotBlank(message = "La contraseña es obligatoria")
     @Size(min = 6, message = "La contraseña debe tener al menos 6 caracteres")
     private String password;
+
+    private Boolean acceptTerms;
 }

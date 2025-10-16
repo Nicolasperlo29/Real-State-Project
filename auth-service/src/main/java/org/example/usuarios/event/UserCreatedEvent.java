@@ -13,6 +13,7 @@ public class UserCreatedEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private String fullname;
     private Long authUserId;
     private String email;
 }

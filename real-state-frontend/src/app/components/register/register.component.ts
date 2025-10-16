@@ -17,11 +17,15 @@ export class RegisterComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private userService: UserService) {
     this.form = this.fb.group({
-      email: ['', [Validators.required]],
+      fullname: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      // phone: ['', [Validators.pattern(/^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required]]
+      // confirmPassword: ['', [Validators.required]],
+      acceptTerms: [false, [Validators.requiredTrue]]
     },
-      { validators: this.passwordMatchValidator })
+      // { validators: this.passwordMatchValidator }
+    )
   }
 
   ngOnInit(): void {
@@ -48,9 +52,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const { email, password } = this.form.value;
+    const { fullname, acceptTerms, email, password } = this.form.value;
 
-    this.userService.registerUser({ email, password }).subscribe({
+    this.userService.registerUser({ fullname, acceptTerms, email, password }).subscribe({
       next: (response) => {
         console.log('Usuario registrado', response);
         this.userService.login({ email, password }).subscribe({
@@ -70,5 +74,13 @@ export class RegisterComponent implements OnInit {
         console.error('Error al registrar usuario', error);
       }
     });
+  }
+
+  registerWithGoogle() {
+    // Implementar OAuth de Google
+  }
+
+  registerWithFacebook() {
+    // Implementar OAuth de Facebook
   }
 }

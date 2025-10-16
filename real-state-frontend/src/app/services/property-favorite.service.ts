@@ -9,7 +9,7 @@ import { FavoriteProperty } from '../interfaces/favorite-property';
 })
 export class PropertyFavoriteService {
 
-  private baseUrl = 'http://localhost:8083/favorites'; // Cambiar al URL de tu microservicio
+  private baseUrl = 'http://localhost:8082/favorites'; // Cambiar al URL de tu microservicio
 
   constructor(private http: HttpClient) { }
 

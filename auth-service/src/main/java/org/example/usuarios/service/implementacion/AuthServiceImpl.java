@@ -5,9 +5,7 @@ import org.example.usuarios.DTOS.*;
 import org.example.usuarios.domain.Role;
 import org.example.usuarios.entity.AuthUserEntity;
 import org.example.usuarios.event.UserCreatedEvent;
-import org.example.usuarios.exception.EmailAlreadyExistsException;
-import org.example.usuarios.exception.InvalidEmailException;
-import org.example.usuarios.exception.InvalidPasswordException;
+import org.example.usuarios.exception.*;
 import org.example.usuarios.repository.AuthUserRepository;
 import org.example.usuarios.service.AuthService;
 import org.springframework.amqp.core.TopicExchange;
@@ -37,6 +35,10 @@ public class AuthServiceImpl implements AuthService {
     public UserDTO register(UserRequest request) {
 
         // Validación del email
+        if (request.getFullname() == null || request.getFullname().isEmpty()) {
+            throw new InvalidNameException("El nombre es obligatorio");
+        }
+
         if (request.getEmail() == null || request.getEmail().isEmpty()) {
             throw new InvalidEmailException("El email es obligatorio");
         }
@@ -50,6 +52,10 @@ public class AuthServiceImpl implements AuthService {
             throw new InvalidPasswordException("La contraseña debe tener al menos 6 caracteres");
         }
 
+        if (request.getAcceptTerms() == null || !request.getAcceptTerms()) {
+            throw new InvalidTermsException("Debes aceptar los términos y condiciones");
+        }
+
         // Verificar si el email ya existe
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException("El email ya está registrado");
@@ -57,16 +63,19 @@ public class AuthServiceImpl implements AuthService {
 
         // Crear usuario
         AuthUserEntity user = new AuthUserEntity();
+        user.setFullname(request.getFullname());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER); // asigna un rol por defecto
         user.setActive(true);
+        user.setAcceptTerms(request.getAcceptTerms());
 
         // Guardar en la base
         AuthUserEntity savedUser = userRepository.save(user);
 
 
         UserCreatedEvent event = new UserCreatedEvent(
+                savedUser.getFullname(),
                 savedUser.getId(),
                 savedUser.getEmail()
         );

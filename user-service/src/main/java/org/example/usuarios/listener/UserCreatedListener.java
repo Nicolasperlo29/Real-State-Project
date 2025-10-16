@@ -20,6 +20,7 @@ public class UserCreatedListener {
     )
     public void handleUserCreated(UserCreatedEvent event) {
         UserEntity user = new UserEntity();
+        user.setFullName(event.getFullname());
         user.setAuthUserId(event.getAuthUserId());
         user.setEmail(event.getEmail());
         repository.save(user);

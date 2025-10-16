@@ -20,11 +20,17 @@ public class AuthUserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String fullname;
+
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false)
+    private boolean acceptTerms;
 
     @Enumerated(EnumType.STRING)
     private Role role;
