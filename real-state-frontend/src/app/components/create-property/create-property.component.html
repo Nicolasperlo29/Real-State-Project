@@ -1,0 +1,40 @@
+<div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">Crear Propiedad</h1>
+
+    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="space-y-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input formControlName="title" placeholder="Título" class="border p-2 rounded w-full" />
+            <input formControlName="city" placeholder="Ciudad" class="border p-2 rounded w-full" />
+            <input formControlName="address" placeholder="Dirección" class="border p-2 rounded w-full" />
+            <input formControlName="type" placeholder="Tipo" class="border p-2 rounded w-full" />
+            <input formControlName="status" placeholder="Estado" class="border p-2 rounded w-full" />
+            <input formControlName="rooms" type="number" placeholder="Habitaciones" class="border p-2 rounded w-full" />
+            <input formControlName="bathrooms" type="number" placeholder="Banios" class="border p-2 rounded w-full" />
+            <input formControlName="areaCubierta" type="number" placeholder="Área Cubierta" class="border p-2 rounded w-full" />
+            <input formControlName="areaTotal" type="number" placeholder="Área Total" class="border p-2 rounded w-full" />
+            <input formControlName="price" type="number" placeholder="Precio" class="border p-2 rounded w-full" />
+            <input formControlName="latitude" type="number" placeholder="Latitud" class="border p-2 rounded w-full" />
+            <input formControlName="longitude" type="number" placeholder="Longitud" class="border p-2 rounded w-full" />
+        </div>
+
+        <textarea formControlName="description" placeholder="Descripción"
+            class="border p-2 rounded w-full h-24"></textarea>
+
+        <div formArrayName="images" class="space-y-2">
+            <label class="font-semibold">Imágenes:</label>
+            <div *ngFor="let img of images.controls; let i = index" class="flex gap-2">
+                <input [formControlName]="i" placeholder="URL Imagen" class="border p-2 rounded flex-1" />
+                <button type="button" (click)="removeImage(i)"
+                    class="bg-red-500 text-white px-3 rounded hover:bg-red-600">Eliminar</button>
+            </div>
+            <button type="button" (click)="addImage()"
+                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Agregar Imagen</button>
+        </div>
+
+        <button type="submit" [disabled]="propertyForm.invalid"
+            class="w-full bg-green-500 text-white py-3 rounded hover:bg-green-600 mt-4 font-semibold">
+            Guardar Propiedad
+        </button>
+    </form>
+</div>
