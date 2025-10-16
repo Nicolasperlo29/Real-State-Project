@@ -1,0 +1,50 @@
+<header>
+  <nav>
+    <div class="logo">LUXE</div>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a [routerLink]="['/list']">Propiedades</a></li>
+      <li><a [routerLink]="['/create']">Publicar</a></li>
+      @if (loggedIn) {
+      <a [routerLink]="['/profile']">Perfil</a>
+      }
+      @if (!loggedIn) {
+      <li><a [routerLink]="['/register']">Registrarse</a></li>
+      <li><a [routerLink]="['/login']">Login</a></li>
+      }
+    </ul>
+  </nav>
+</header>
+
+<router-outlet></router-outlet>
+
+<footer id="contacto">
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>LUXE Properties</h3>
+      <p>Redefiniendo el estándar del mercado inmobiliario de lujo desde 1995</p>
+    </div>
+    <div class="footer-section">
+      <h3>Navegación</h3>
+      <a href="#inicio">Inicio</a>
+      <a href="#propiedades">Propiedades</a>
+      <a href="#servicios">Servicios</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <div class="footer-section">
+      <h3>Contacto</h3>
+      <p>📞 +54 11 5555-8888</p>
+      <p>📧 infoluxeproperties.com</p>
+      <p>📍 Av. Libertador 1234, CABA</p>
+    </div>
+    <div class="footer-section">
+      <h3>Horarios</h3>
+      <p>Lunes - Viernes: 9:00 - 19:00</p>
+      <p>Sábados: 10:00 - 14:00</p>
+      <p>Domingos: Cerrado</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 LUXE Properties. Todos los derechos reservados. | Diseño Premium</p>
+  </div>
+</footer>

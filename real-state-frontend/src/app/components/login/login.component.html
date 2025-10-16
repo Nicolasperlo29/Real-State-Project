@@ -1,0 +1,30 @@
+<div class="login-container">
+  <h2>Login</h2>
+  
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <div>
+      <label>Email</label>
+      <input type="email" formControlName="email">
+      <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+        <small *ngIf="loginForm.get('email')?.errors?.['required']">El email es obligatorio</small>
+        <small *ngIf="loginForm.get('email')?.errors?.['email']">Email inválido</small>
+      </div>
+    </div>
+
+    <div>
+      <label>Contraseña</label>
+      <input type="password" formControlName="password">
+      <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        <small *ngIf="loginForm.get('password')?.errors?.['required']">La contraseña es obligatoria</small>
+        <small *ngIf="loginForm.get('password')?.errors?.['minlength']">
+          La contraseña debe tener al menos 6 caracteres
+        </small>
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loginForm.invalid">Ingresar</button>
+    
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  </form>
+</div>

@@ -1,0 +1,75 @@
+/* You can add global styles to this file, and also import other style files */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+router-outlet {
+    flex: 1;
+    display: block;
+    /* necesario para que ocupe espacio */
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box;
+}
+
+/* Quita decoraciones y hereda fuente */
+body,
+input,
+button,
+textarea,
+select {
+    font: inherit;
+    color: inherit;
+    background: none;
+    outline: none;
+}
+
+/* Quita viñetas y subrayados */
+ul,
+ol {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Asegura que las imágenes no se desborden */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Quita espacios en tablas */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+main,
+router-outlet {
+    flex: 1;
+    display: block;
+    margin-top: 80px;
+    /* ajustá según la altura real del header */
+}

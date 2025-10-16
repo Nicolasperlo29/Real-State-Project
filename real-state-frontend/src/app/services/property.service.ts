@@ -1,0 +1,30 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Property } from '../interfaces/property';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PropertyService {
+
+  private apiUrl = 'http://localhost:8083/api/properties';
+
+  constructor(private http: HttpClient) { }
+
+  getAllProperties(): Observable<Property[]> {
+    return this.http.get<Property[]>(this.apiUrl);
+  }
+
+  getPropertyById(id: number): Observable<Property> {
+    return this.http.get<Property>(`${this.apiUrl}/${id}`);
+  }
+
+  searchByCity(city: string): Observable<Property[]> {
+    return this.http.get<Property[]>(`${this.apiUrl}/search?city=${city}`);
+  }
+
+  createProperty(property: Property): Observable<Property> {
+    return this.http.post<Property>(this.apiUrl + '/create', property);
+  }
+}
