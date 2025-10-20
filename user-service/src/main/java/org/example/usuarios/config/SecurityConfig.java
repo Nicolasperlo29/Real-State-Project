@@ -29,9 +29,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/users",
+                                "/users/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
-                                "/favorites/**" // 👈 añadí esta si querés que favorites sea público
+                                "/favorites/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

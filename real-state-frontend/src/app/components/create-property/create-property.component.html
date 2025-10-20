@@ -1,40 +1,288 @@
-<div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold mb-6 text-center">Crear Propiedad</h1>
-
-    <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()" class="space-y-4">
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input formControlName="title" placeholder="Título" class="border p-2 rounded w-full" />
-            <input formControlName="city" placeholder="Ciudad" class="border p-2 rounded w-full" />
-            <input formControlName="address" placeholder="Dirección" class="border p-2 rounded w-full" />
-            <input formControlName="type" placeholder="Tipo" class="border p-2 rounded w-full" />
-            <input formControlName="status" placeholder="Estado" class="border p-2 rounded w-full" />
-            <input formControlName="rooms" type="number" placeholder="Habitaciones" class="border p-2 rounded w-full" />
-            <input formControlName="bathrooms" type="number" placeholder="Banios" class="border p-2 rounded w-full" />
-            <input formControlName="areaCubierta" type="number" placeholder="Área Cubierta" class="border p-2 rounded w-full" />
-            <input formControlName="areaTotal" type="number" placeholder="Área Total" class="border p-2 rounded w-full" />
-            <input formControlName="price" type="number" placeholder="Precio" class="border p-2 rounded w-full" />
-            <input formControlName="latitude" type="number" placeholder="Latitud" class="border p-2 rounded w-full" />
-            <input formControlName="longitude" type="number" placeholder="Longitud" class="border p-2 rounded w-full" />
-        </div>
-
-        <textarea formControlName="description" placeholder="Descripción"
-            class="border p-2 rounded w-full h-24"></textarea>
-
-        <div formArrayName="images" class="space-y-2">
-            <label class="font-semibold">Imágenes:</label>
-            <div *ngFor="let img of images.controls; let i = index" class="flex gap-2">
-                <input [formControlName]="i" placeholder="URL Imagen" class="border p-2 rounded flex-1" />
-                <button type="button" (click)="removeImage(i)"
-                    class="bg-red-500 text-white px-3 rounded hover:bg-red-600">Eliminar</button>
+<div class="property-form-container">
+    <div class="form-card">
+        <!-- Header -->
+        <div class="form-header">
+            <div class="header-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
             </div>
-            <button type="button" (click)="addImage()"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mt-2">Agregar Imagen</button>
+            <h1>Crear Nueva Propiedad</h1>
+            <p>Completa la información de la propiedad</p>
         </div>
 
-        <button type="submit" [disabled]="propertyForm.invalid"
-            class="w-full bg-green-500 text-white py-3 rounded hover:bg-green-600 mt-4 font-semibold">
-            Guardar Propiedad
-        </button>
-    </form>
+        <form [formGroup]="propertyForm" (ngSubmit)="onSubmit()">
+            <!-- Información Básica -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    Información Básica
+                </h2>
+
+                <div class="form-group">
+                    <label for="title">
+                        Título de la Propiedad <span class="required">*</span>
+                    </label>
+                    <input type="text" id="title" formControlName="title"
+                        placeholder="Ej: Departamento moderno en zona céntrica"
+                        [class.error]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">
+                    <div class="error-message"
+                        *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">
+                        <small>El título es obligatorio</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="type">
+                            Tipo de Propiedad <span class="required">*</span>
+                        </label>
+                        <select id="type" formControlName="type"
+                            [class.error]="propertyForm.get('type')?.invalid && propertyForm.get('type')?.touched">
+                            <option value="">Seleccionar tipo</option>
+                            <option value="CASA">Casa</option>
+                            <option value="DEPARTAMENTO">Departamento</option>
+                            <option value="PH">PH</option>
+                            <option value="TERRENO">Terreno</option>
+                            <option value="LOCAL">Local Comercial</option>
+                            <option value="OFICINA">Oficina</option>
+                        </select>
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('type')?.invalid && propertyForm.get('type')?.touched">
+                            <small>Selecciona un tipo</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">
+                            Estado <span class="required">*</span>
+                        </label>
+                        <select id="status" formControlName="status"
+                            [class.error]="propertyForm.get('status')?.invalid && propertyForm.get('status')?.touched">
+                            <option value="">Seleccionar estado</option>
+                            <option value="NUEVO">Nuevo</option>
+                            <option value="USADO">Usado</option>
+                            <option value="EN_CONSTRUCCION">En Construcción</option>
+                        </select>
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('status')?.invalid && propertyForm.get('status')?.touched">
+                            <small>Selecciona un estado</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">
+                        Descripción <span class="required">*</span>
+                    </label>
+                    <textarea id="description" formControlName="description"
+                        placeholder="Describe las características de la propiedad..." rows="4"
+                        [class.error]="propertyForm.get('description')?.invalid && propertyForm.get('description')?.touched"></textarea>
+                    <div class="error-message"
+                        *ngIf="propertyForm.get('description')?.invalid && propertyForm.get('description')?.touched">
+                        <small>La descripción es obligatoria</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="price">
+                        Precio <span class="required">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        <span class="input-icon-left">$</span>
+                        <input type="number" id="price" formControlName="price" placeholder="1500000"
+                            [class.error]="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched">
+                    </div>
+                    <div class="error-message"
+                        *ngIf="propertyForm.get('price')?.invalid && propertyForm.get('price')?.touched">
+                        <small>El precio es obligatorio y debe ser mayor a 0</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                        <circle cx="12" cy="10" r="3"></circle>
+                    </svg>
+                    Ubicación
+                </h2>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">
+                            Ciudad <span class="required">*</span>
+                        </label>
+                        <input type="text" id="city" formControlName="city" placeholder="Ej: Córdoba"
+                            [class.error]="propertyForm.get('city')?.invalid && propertyForm.get('city')?.touched">
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('city')?.invalid && propertyForm.get('city')?.touched">
+                            <small>La ciudad es obligatoria</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">
+                            Dirección <span class="required">*</span>
+                        </label>
+                        <input type="text" id="address" formControlName="address" placeholder="Ej: Av. Colón 1234"
+                            [class.error]="propertyForm.get('address')?.invalid && propertyForm.get('address')?.touched">
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('address')?.invalid && propertyForm.get('address')?.touched">
+                            <small>La dirección es obligatoria</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="latitude">
+                            Latitud <span class="optional">(opcional)</span>
+                        </label>
+                        <input type="number" id="latitude" formControlName="latitude" placeholder="-31.4201" step="any">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="longitude">
+                            Longitud <span class="optional">(opcional)</span>
+                        </label>
+                        <input type="number" id="longitude" formControlName="longitude" placeholder="-64.1888"
+                            step="any">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Características -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Características
+                </h2>
+
+                <div class="form-row form-row-3">
+                    <div class="form-group">
+                        <label for="rooms">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M3 9v11a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9"></path>
+                                <path d="M9 22V12h6v10M2 10.6L12 2l10 8.6"></path>
+                            </svg>
+                            Habitaciones <span class="required">*</span>
+                        </label>
+                        <input type="number" id="rooms" formControlName="rooms" placeholder="3" min="0"
+                            [class.error]="propertyForm.get('rooms')?.invalid && propertyForm.get('rooms')?.touched">
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('rooms')?.invalid && propertyForm.get('rooms')?.touched">
+                            <small>Las habitaciones son obligatorias</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bathrooms">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M9 6h6M12 3v3M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5M3 21h18"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                            Baños <span class="required">*</span>
+                        </label>
+                        <input type="number" id="bathrooms" formControlName="bathrooms" placeholder="2" min="0"
+                            [class.error]="propertyForm.get('bathrooms')?.invalid && propertyForm.get('bathrooms')?.touched">
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('bathrooms')?.invalid && propertyForm.get('bathrooms')?.touched">
+                            <small>Los baños son obligatorios</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="areaCubierta">
+                            Área Cubierta (m²) <span class="required">*</span>
+                        </label>
+                        <input type="number" id="areaCubierta" formControlName="areaCubierta" placeholder="120" min="0"
+                            [class.error]="propertyForm.get('areaCubierta')?.invalid && propertyForm.get('areaCubierta')?.touched">
+                        <div class="error-message"
+                            *ngIf="propertyForm.get('areaCubierta')?.invalid && propertyForm.get('areaCubierta')?.touched">
+                            <small>El área cubierta es obligatoria</small>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="areaTotal">
+                            Área Total (m²) <span class="optional">(opcional)</span>
+                        </label>
+                        <input type="number" id="areaTotal" formControlName="areaTotal" placeholder="150" min="0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Imágenes -->
+            <div class="form-section">
+                <h2 class="section-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                        <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                        <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    Imágenes de la Propiedad
+                </h2>
+
+                <div formArrayName="images" class="images-section">
+                    <div *ngFor="let img of images.controls; let i = index" class="image-input-row">
+                        <div class="form-group flex-1">
+                            <input [formControlName]="i" type="url" placeholder="https://ejemplo.com/imagen.jpg"
+                                class="image-input">
+                        </div>
+                        <button type="button" (click)="removeImage(i)" class="btn-remove-image"
+                            [disabled]="images.length === 1">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path
+                                    d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <button type="button" (click)="addImage()" class="btn-add-image">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Agregar otra imagen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="button" class="btn-cancel" (click)="onCancel()">
+                    Cancelar
+                </button>
+                <button type="submit" class="btn-submit" [disabled]="propertyForm.invalid">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    Guardar Propiedad
+                </button>
+            </div>
+        </form>
+    </div>
 </div>

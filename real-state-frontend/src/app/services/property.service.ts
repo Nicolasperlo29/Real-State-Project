@@ -8,7 +8,7 @@ import { Property } from '../interfaces/property';
 })
 export class PropertyService {
 
-  private apiUrl = 'http://localhost:8083/api/properties';
+  private apiUrl = 'http://localhost:8083/properties';
 
   constructor(private http: HttpClient) { }
 

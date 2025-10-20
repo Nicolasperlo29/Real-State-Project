@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PropertyService } from '../../services/property.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-property',
@@ -15,7 +16,7 @@ export class CreatePropertyComponent implements OnInit {
 
   propertyForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private service: PropertyService) { }
+  constructor(private fb: FormBuilder, private http: HttpClient, private service: PropertyService, private router: Router) { }
 
   ngOnInit(): void {
     this.propertyForm = this.fb.group({
@@ -65,6 +66,12 @@ export class CreatePropertyComponent implements OnInit {
           alert('Error al crear la propiedad');
         }
       });
+    }
+  }
+
+    onCancel(): void {
+    if (confirm('¿Estás seguro de que deseas cancelar? Los cambios no guardados se perderán.')) {
+      this.router.navigate(['/properties']);
     }
   }
 }

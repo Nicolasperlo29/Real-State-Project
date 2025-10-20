@@ -2,13 +2,16 @@ package org.example.usuarios.controller;
 
 import jakarta.validation.Valid;
 import org.example.usuarios.DTOS.*;
+import org.example.usuarios.entity.FavoriteProperty;
 import org.example.usuarios.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.example.usuarios.service.UserService;
+import reactor.core.publisher.Mono;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,4 +34,11 @@ public class UserController {
         UserEntity entity = userService.getUserById(id);
         return ResponseEntity.ok(entity);
     }
+
+    @GetMapping("/{userId}/profile")
+    public Mono<UserWithFavoritesDTO> getUserWithFavorites(@PathVariable Long userId) {
+        // Llamamos directamente al método reactivo del servicio
+        return userService.getUserWithFavoritesReactive(userId);
+    }
+
 }

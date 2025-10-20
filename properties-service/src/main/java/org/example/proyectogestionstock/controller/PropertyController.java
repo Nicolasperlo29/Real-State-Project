@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/properties")
+@RequestMapping("/properties")
 @CrossOrigin(origins = "*") // permitir llamadas desde Angular
 @RequiredArgsConstructor
 public class PropertyController {
