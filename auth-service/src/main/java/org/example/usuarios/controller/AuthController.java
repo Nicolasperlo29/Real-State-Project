@@ -3,6 +3,7 @@ package org.example.usuarios.controller;
 import org.example.usuarios.DTOS.*;
 import org.example.usuarios.entity.AuthUserEntity;
 import org.example.usuarios.repository.AuthUserRepository;
+import org.example.usuarios.service.implementacion.JwtServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,9 @@ public class AuthController {
 
     @Autowired
     private AuthUserRepository userRepository;
+
+    @Autowired
+    private JwtServiceImpl jwtService;
 
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<UserDTO>> register(@RequestBody UserRequest request) {
@@ -69,4 +73,22 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         return ResponseEntity.ok(authService.login(request));
     }
+
+
+    @PostMapping("/refresh")
+    public ResponseEntity<?> refresh(@RequestBody Map<String, String> request) {
+        String refreshToken = request.get("refreshToken");
+
+        if (!jwtService.validateToken(refreshToken)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Refresh token inválido o expirado");
+        }
+
+        String email = jwtService.getEmailFromToken(refreshToken);
+        AuthUserEntity user = authService.getUserByEmail(email);
+
+        String newAccessToken = jwtService.generateToken(user, 1000 * 60 * 15); // 15 min
+
+        return ResponseEntity.ok(Map.of("token", newAccessToken));
+    }
+
 }

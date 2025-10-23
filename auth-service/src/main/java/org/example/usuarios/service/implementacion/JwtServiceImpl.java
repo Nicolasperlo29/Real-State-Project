@@ -17,12 +17,12 @@ public class JwtServiceImpl {
     private static final String SECRET_KEY = "QqK8bHx9kT1RzM3WqY5eVb6gA2tJx0PnL8sFd4uH9wI=";
     private final SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
 
-    public String generateToken(AuthUserEntity user) {
+    public String generateToken(AuthUserEntity user, long expirationMillis) {
         return Jwts.builder()
                 .setSubject(user.getEmail())
                 .claim("role", user.getRole().name())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }

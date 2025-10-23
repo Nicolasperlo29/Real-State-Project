@@ -5,6 +5,7 @@ import { UsuariosService } from '../../services/usuarios.service';
 import { UserWithFavorites } from '../../interfaces/user-with-favorites';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
+import { PropertyFavoriteService } from '../../services/property-favorite.service';
 
 @Component({
   selector: 'app-profile',
@@ -22,6 +23,7 @@ export class ProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private usuarioService: UsuariosService,
+    private propertyFavoriteService: PropertyFavoriteService,
     private router: Router
   ) { }
 
@@ -82,8 +84,15 @@ export class ProfileComponent implements OnInit {
   toggleFavorite(propertyId: number): void {
     // TODO: Implementar eliminar de favoritos
     console.log('Toggle favorite:', propertyId);
-    // Llamar al servicio para eliminar de favoritos
-    // Luego recargar la lista
+    this.propertyFavoriteService.removeFavorite(this.user!.id, propertyId).subscribe({
+      next: () => {
+        console.log('Eliminado de favoritos:', propertyId);
+        this.loadUserWithFavorites(this.user!.id);
+      },
+      error: (error) => {
+        console.error('Error al eliminar de favoritos:', error);
+      }
+    });
   }
 
   logout(): void {

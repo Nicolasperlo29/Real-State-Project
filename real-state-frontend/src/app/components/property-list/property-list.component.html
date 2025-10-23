@@ -1,55 +1,166 @@
 <div class="properties-section">
+    <!-- Barra de Filtros -->
+    <div class="filters-container">
+        <div class="filters-header">
+            <h2 class="filters-title">
+                <i class="fa-solid fa-heart"></i>
+                Propiedades ({{ filteredProperties.length }})
+            </h2>
+            <button class="reset-btn" (click)="resetFilters()"
+                *ngIf="selectedType !== 'todos' || searchTerm || minPrice > 0 || maxPrice > 0">
+                <i class="fa-solid fa-rotate-right"></i>
+                Limpiar filtros
+            </button>
+        </div>
 
-    <div class="property-grid">
-        <div *ngFor="let property of properties" class="property-card">
+        <!-- Barra de búsqueda -->
+        <div class="search-bar">
+            <i class="fa-solid fa-search search-icon"></i>
+            <input type="text" class="search-input" placeholder="Buscar por título, ubicación o ciudad..."
+                [(ngModel)]="searchTerm" />
+        </div>
+
+        <div class="filters-grid">
+            <!-- Filtro por tipo -->
+            <div class="filter-group">
+                <label class="filter-label">
+                    <i class="fa-solid fa-building"></i>
+                    Tipo de propiedad
+                </label>
+                <select class="filter-select" [(ngModel)]="selectedType">
+                    <option value="todos">Todas</option>
+                    <option *ngFor="let type of propertyTypes" [value]="type">{{ type }}</option>
+                </select>
+            </div>
+
+            <!-- Filtro por ordenamiento -->
+            <div class="filter-group">
+                <label class="filter-label">
+                    <i class="fa-solid fa-sort"></i>
+                    Ordenar por
+                </label>
+                <select class="filter-select" [(ngModel)]="selectedSort">
+                    <option value="reciente">Más recientes</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="area-desc">Mayor superficie</option>
+                </select>
+            </div>
+
+            <!-- Filtro precio mínimo -->
+            <div class="filter-group">
+                <label class="filter-label">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    Precio mínimo
+                </label>
+                <input type="number" class="filter-input" placeholder="USD 0" [(ngModel)]="minPrice" min="0" />
+            </div>
+
+            <!-- Filtro precio máximo -->
+            <div class="filter-group">
+                <label class="filter-label">
+                    <i class="fa-solid fa-dollar-sign"></i>
+                    Precio máximo
+                </label>
+                <input type="number" class="filter-input" placeholder="USD 999,999" [(ngModel)]="maxPrice" min="0" />
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid de propiedades -->
+    <div class="property-grid" *ngIf="filteredProperties.length > 0">
+        <div *ngFor="let property of filteredProperties" class="property-card">
             <div class="property-image-container">
                 <img *ngIf="property.images.length > 0" [src]="property.images[property.currentImageIndex || 0].url"
                     [alt]="property.title" class="property-image" />
+
                 <div class="property-type-badge">{{ property.type }}</div>
 
-                <button class="arrow left" (click)="prevImage(property)">&#10094;</button>
-                <button class="arrow right" (click)="nextImage(property)">&#10095;</button>
+                <button class="favorite-btn" [class.active]="isFavorite(property.id)"
+                    (click)="toggleFavorite(property.id)"
+                    [title]="isFavorite(property.id) ? 'Eliminar de favoritos' : 'Agregar a favoritos'">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                        stroke-width="2">
+                        <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                    </svg>
+                </button>
+
+                <button class="arrow left" (click)="prevImage(property)" *ngIf="property.images.length > 1">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+                <button class="arrow right" (click)="nextImage(property)" *ngIf="property.images.length > 1">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+
+                <div class="image-indicator" *ngIf="property.images.length > 1">
+                    {{ (property.currentImageIndex || 0) + 1 }} / {{ property.images.length }}
+                </div>
             </div>
 
             <div class="property-details">
                 <h2 class="property-title">{{ property.title }}</h2>
-                @if (loggedIn) {
-                    <button (click)="addToFavorites(property.id, userId)">Agregar a Favoritos</button>
-                }
 
                 <p class="property-location">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span>{{ property.address }}, {{ property.city }}</span>
+                    <span>📍 {{ property.address }}, {{ property.city }}</span>
                 </p>
 
-                <p class="property-price">{{ property.price | currency }}</p>
+                <p class="property-price">USD {{ property.price | number:'1.0-0' }}</p>
 
                 <div class="property-divider"></div>
 
                 <div class="property-info">
                     <span class="property-info-item">
                         <i class="fa-solid fa-house"></i>
-                        🏠 {{ property.areaCubierta }}m²
+                        <span>🏠 {{ property.areaCubierta }}m²</span>
                     </span>
-                    @if (property.areaTotal > 0) {
-                    <span class="property-info-item">
+                    <span class="property-info-item" *ngIf="property.areaTotal > 0">
                         <i class="fa-solid fa-maximize"></i>
-                        🌳 {{ property.areaTotal }}m²
+                        <span>🌳 {{ property.areaTotal }}m²</span>
                     </span>
-                    }
                     <span class="property-info-item">
                         <i class="fa-solid fa-bed"></i>
-                        🛏️ {{ property.rooms }} hab
+                        <span>🛏️ {{ property.rooms }} hab</span>
                     </span>
-                    <span>
+                    <span class="property-info-item">
                         <i class="fa-solid fa-bath"></i>
-                        🚿 {{ property.bathrooms }} baños
+                        <span>🚿 {{ property.bathrooms }} baños</span>
                     </span>
                 </div>
 
                 <a [routerLink]="['/property', property.id]" class="view-details-button">
                     Ver Detalles
+                    <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- Estado vacío -->
+    <div class="empty-state" *ngIf="filteredProperties.length === 0 && !isLoading">
+        <div class="empty-icon">
+            <i class="fa-solid fa-heart-crack"></i>
+        </div>
+        <h3 class="empty-title">No se encontraron propiedades</h3>
+        <p class="empty-description">
+            <span *ngIf="searchTerm || selectedType !== 'todos' || minPrice > 0 || maxPrice > 0">
+                Intenta ajustar los filtros para ver más resultados
+            </span>
+            <span *ngIf="!searchTerm && selectedType === 'todos' && minPrice === 0 && maxPrice === 0">
+                Aún no tienes propiedades en tus favoritos
+            </span>
+        </p>
+        <button class="empty-button" (click)="resetFilters()"
+            *ngIf="searchTerm || selectedType !== 'todos' || minPrice > 0 || maxPrice > 0">
+            <i class="fa-solid fa-rotate-right"></i>
+            Limpiar filtros
+        </button>
+        <button class="empty-button"
+            *ngIf="!searchTerm && selectedType === 'todos' && minPrice === 0 && maxPrice === 0">
+            <i class="fa-solid fa-search"></i>
+            Explorar propiedades
+        </button>
+    </div>
+</div>

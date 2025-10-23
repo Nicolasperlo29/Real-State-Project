@@ -18,7 +18,7 @@ export class PropertyFavoriteService {
   }
 
   removeFavorite(userId: number, propertyId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/user/${userId}/property/${propertyId}`);
+    return this.http.delete<void>(`${this.baseUrl}/${userId}/${propertyId}`);
   }
 
   getFavoritesByUser(userId: number): Observable<FavoriteProperty[]> {

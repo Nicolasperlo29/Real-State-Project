@@ -99,8 +99,10 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("Credenciales incorrectas");
         }
 
-        String token = jwtService.generateToken(user);
-        return new AuthResponse(token);
+        String token = jwtService.generateToken(user, 1000 * 60 * 150);
+        String refreshToken = jwtService.generateToken(user, 1000L * 60 * 60 * 24 * 7); // 7 días
+
+        return new AuthResponse(token, refreshToken);
     }
     @Override
     public List<AuthUserEntity> getUsers() {

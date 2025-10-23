@@ -121,8 +121,8 @@
 
           <div class="property-content">
             <div class="property-header">
-              <div>{{ favorite.property.title}}</div>
-              <div>{{ favorite.property.price | currency}}</div>
+              <div style="height: 55px;">{{ favorite.property.title}}</div>
+              <div>USD {{ favorite.property.price | number:'1.0-0' }}</div>
               <div class="property-info">
                 <span class="property-info-item">
                   <i class="fa-solid fa-house"></i>
