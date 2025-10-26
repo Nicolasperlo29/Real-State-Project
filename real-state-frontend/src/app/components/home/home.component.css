@@ -95,11 +95,27 @@
     padding: 2rem;
     border-radius: 20px;
     display: flex;
+    flex-wrap: wrap;
+    /* permite que los elementos bajen si no hay espacio */
+    justify-content: center;
     gap: 1rem;
     max-width: 900px;
     margin: 0 auto;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+
+  .search-box select {
+    width: 600px;
+    max-width: 100%;
+    /* no se pasa del ancho disponible */
+    flex: 1;
+    /* ocupa espacio disponible */
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
   }
 
   .search-box input,
@@ -431,5 +447,11 @@
     .properties,
     .cta-section {
       padding: 4rem 1.5rem;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .search-box select {
+      width: 100%;
     }
   }

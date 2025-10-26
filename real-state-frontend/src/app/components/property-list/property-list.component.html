@@ -4,7 +4,7 @@
         <div class="filters-header">
             <h2 class="filters-title">
                 <i class="fa-solid fa-heart"></i>
-                Propiedades ({{ filteredProperties.length }})
+                Propiedades
             </h2>
             <button class="reset-btn" (click)="resetFilters()"
                 *ngIf="selectedType !== 'todos' || searchTerm || minPrice > 0 || maxPrice > 0">
@@ -67,15 +67,16 @@
         </div>
     </div>
 
-    <!-- Grid de propiedades -->
-    <div class="property-grid" *ngIf="filteredProperties.length > 0">
-        <div *ngFor="let property of filteredProperties" class="property-card">
+    <!-- Lista de propiedades (horizontales) -->
+    <div class="property-list" *ngIf="filteredProperties.length > 0">
+        <div *ngFor="let property of paginatedProperties" class="property-card-horizontal"
+            [routerLink]="['/property', property.id]">
             <div class="property-image-container">
                 <img *ngIf="property.images.length > 0" [src]="property.images[property.currentImageIndex || 0].url"
                     [alt]="property.title" class="property-image" />
 
                 <div class="property-type-badge">{{ property.type }}</div>
-
+                @if (loggedIn) {
                 <button class="favorite-btn" [class.active]="isFavorite(property.id)"
                     (click)="toggleFavorite(property.id)"
                     [title]="isFavorite(property.id) ? 'Eliminar de favoritos' : 'Agregar a favoritos'">
@@ -86,6 +87,7 @@
                         </path>
                     </svg>
                 </button>
+                }
 
                 <button class="arrow left" (click)="prevImage(property)" *ngIf="property.images.length > 1">
                     <i class="fa-solid fa-chevron-left"></i>
@@ -100,29 +102,34 @@
             </div>
 
             <div class="property-details">
-                <h2 class="property-title">{{ property.title }}</h2>
+                <div class="property-header">
+                    <h2 class="property-title">{{ property.title }}</h2>
+                    <p class="property-price">USD {{ property.price | number:'1.0-0' }}</p>
+                </div>
 
                 <p class="property-location">
                     <i class="fa-solid fa-location-dot"></i>
                     <span>📍 {{ property.address }}, {{ property.city }}</span>
                 </p>
 
-                <p class="property-price">USD {{ property.price | number:'1.0-0' }}</p>
+                <p class="property-location">
+                    {{property.description}}
+                </p>
 
                 <div class="property-divider"></div>
 
                 <div class="property-info">
                     <span class="property-info-item">
                         <i class="fa-solid fa-house"></i>
-                        <span>🏠 {{ property.areaCubierta }}m²</span>
+                        <span>🏠 {{ property.areaCubierta }}m² cubiertos</span>
                     </span>
                     <span class="property-info-item" *ngIf="property.areaTotal > 0">
                         <i class="fa-solid fa-maximize"></i>
-                        <span>🌳 {{ property.areaTotal }}m²</span>
+                        <span>🌳 {{ property.areaTotal }}m² totales</span>
                     </span>
                     <span class="property-info-item">
                         <i class="fa-solid fa-bed"></i>
-                        <span>🛏️ {{ property.rooms }} hab</span>
+                        <span>🛏️ {{ property.rooms }} dormitorios</span>
                     </span>
                     <span class="property-info-item">
                         <i class="fa-solid fa-bath"></i>
@@ -130,13 +137,36 @@
                     </span>
                 </div>
 
-                <a [routerLink]="['/property', property.id]" class="view-details-button">
-                    Ver Detalles
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
+                <div style="display: flex; gap: 10px; justify-content: end;">
+                    <a [routerLink]="['/property', property.id]" class="view-details-button" style="background-color: orangered;">
+                        Contactar
+                    </a>
+                    <a [routerLink]="['/property', property.id]" class="view-details-button" style="background-color: green;">
+                        Whatsapp
+                    </a>
+                    <a [routerLink]="['/property', property.id]" class="view-details-button" style="color: black;">
+                        📞 Llamar
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination-container" *ngIf="totalPages > 0">
+        <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">
+            ← Anterior
+        </button>
+
+        <span class="pagination-info">
+            Página {{ currentPage }} de {{ totalPages }}
+        </span>
+
+        <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+            Siguiente →
+        </button>
+    </div>
+
 
     <!-- Estado vacío -->
     <div class="empty-state" *ngIf="filteredProperties.length === 0 && !isLoading">

@@ -1,101 +1,93 @@
-<div class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-    <div class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Imagen principal -->
+<div class="property-detail-container">
+    <div class="property-detail-wrapper">
         <!-- Carrusel de imágenes -->
-        <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-6 relative">
-            <div class="relative h-96 md:h-[500px]">
+        <div class="image-carousel">
+            <div class="carousel-container">
                 @if (property.images.length > 0) {
-                <img [src]="property.images[currentImage].url" [alt]="property.title"
-                    class="w-full h-full object-cover transition-all duration-500" />
+                <img [src]="property.images[currentImage].url" [alt]="property.title" class="carousel-image" />
 
                 <!-- Status y favorito -->
-                <div class="absolute top-4 right-4 flex gap-2">
-                    <span class="bg-emerald-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                <div class="carousel-actions">
+                    <span class="property-status">
                         {{ property.status }}
                     </span>
-                    <button (click)="isFavorite = !isFavorite"
-                        class="bg-white p-3 rounded-full shadow-lg hover:scale-110 transition-transform">
-                        <i class="fa-solid fa-heart" [ngClass]="isFavorite ? 'text-red-500' : 'text-gray-600'"></i>
+                    <button (click)="isFavorite = !isFavorite" class="favorite-btn">
+                        <i class="fa-solid fa-heart"
+                            [ngClass]="isFavorite ? 'favorite-active' : 'favorite-inactive'"></i>
                     </button>
                 </div>
 
                 <!-- Botones anterior / siguiente -->
-                <button (click)="prevImage()"
-                    class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
+                <button (click)="prevImage()" class="carousel-btn carousel-btn-prev">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-                <button (click)="nextImage()"
-                    class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-gray-100">
+                <button (click)="nextImage()" class="carousel-btn carousel-btn-next">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
                 }
                 @if (property.images.length == 0) {
-                <div
-                    class="w-full h-full flex flex-col items-center justify-center text-gray-400 bg-gradient-to-br from-slate-100 to-slate-200">
-                    <i class="fa-solid fa-image text-6xl mb-4"></i>
-                    <p class="text-lg">No hay imágenes disponibles</p>
+                <div class="no-images">
+                    <i class="fa-solid fa-image no-images-icon"></i>
+                    <p class="no-images-text">No hay imágenes disponibles</p>
                 </div>
                 }
             </div>
         </div>
 
-
-        <div class="grid md:grid-cols-3 gap-6">
+        <div class="content-grid">
             <!-- Descripción -->
-            <div class="md:col-span-2 space-y-6">
-                <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <div class="flex items-start justify-between mb-6">
+            <div class="main-content">
+                <div class="info-card">
+                    <div class="property-header">
                         <div>
-                            <h1 class="text-3xl font-bold text-gray-900 mb-2">{{ property.title }}</h1>
-                            <div class="flex items-center text-gray-600 mb-4">
-                                <i class="fa-solid fa-map-pin mr-2"></i>
+                            <h1 class="property-title">{{ property.title }}</h1>
+                            <div class="property-location">
+                                <i class="fa-solid fa-map-pin"></i>
                                 <span>{{ property.address }}, {{ property.city }}</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-4xl font-bold text-emerald-600 mb-8">
+                    <div class="property-price">
                         {{ formatPrice(property.price) }}
                     </div>
 
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                        <div class="bg-emerald-50 p-4 rounded-xl">
-                            <i class="fa-solid fa-dollar-sign text-emerald-600 mb-2"></i>
-                            <div class="text-2xl font-bold text-gray-900">{{ property.areaCubierta }}m²
-                            </div>
-                            <div class="text-sm text-gray-600">Construido</div>
+                    <div class="features-grid">
+                        <div class="feature-card feature-card-emerald">
+                            <i class="fa-solid fa-dollar-sign feature-icon"></i>
+                            <div class="feature-value">{{ property.areaCubierta }}m²</div>
+                            <div class="feature-label">Construido</div>
                         </div>
-                        <div class="bg-blue-50 p-4 rounded-xl">
-                            <i class="fa-solid fa-maximize text-blue-600 mb-2"></i>
-                            <div class="text-2xl font-bold text-gray-900">{{ property.areaTotal }}m²</div>
-                            <div class="text-sm text-gray-600">Superficie</div>
+                        <div class="feature-card feature-card-blue">
+                            <i class="fa-solid fa-maximize feature-icon"></i>
+                            <div class="feature-value">{{ property.areaTotal }}m²</div>
+                            <div class="feature-label">Superficie</div>
                         </div>
-                        <div class="bg-purple-50 p-4 rounded-xl">
-                            <i class="fa-solid fa-bed text-purple-600 mb-2"></i>
-                            <div class="text-2xl font-bold text-gray-900">{{ property.rooms }}</div>
-                            <div class="text-sm text-gray-600">Habitaciones</div>
+                        <div class="feature-card feature-card-purple">
+                            <i class="fa-solid fa-bed feature-icon"></i>
+                            <div class="feature-value">{{ property.rooms }}</div>
+                            <div class="feature-label">Habitaciones</div>
                         </div>
-                        <div class="bg-purple-50 p-4 rounded-xl">
-                            <i class="fa-solid fa-bed text-purple-600 mb-2"></i>
-                            <div class="text-2xl font-bold text-gray-900">{{ property.bathrooms }}</div>
-                            <div class="text-sm text-gray-600">Banios</div>
+                        <div class="feature-card feature-card-purple">
+                            <i class="fa-solid fa-bath feature-icon"></i>
+                            <div class="feature-value">{{ property.bathrooms }}</div>
+                            <div class="feature-label">Baños</div>
                         </div>
                     </div>
 
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900 mb-4">Descripción</h2>
-                        <p class="text-gray-600 leading-relaxed">{{ property.description }}</p>
+                    <div class="description-section">
+                        <h2 class="section-title">Descripción</h2>
+                        <p class="description-text">{{ property.description }}</p>
                     </div>
                 </div>
 
                 <!-- Mapa -->
-                <div class="bg-white rounded-2xl shadow-lg p-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-4">Ubicación</h2>
-                    <div
-                        class="bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl h-80 flex flex-col items-center justify-center">
-                        <i class="fa-solid fa-map-location-dot text-gray-400 text-4xl mb-2"></i>
-                        <p class="text-gray-600">Mapa interactivo</p>
-                        <p class="text-sm text-gray-500 mt-1">
+                <div class="map-card">
+                    <h2 class="section-title">Ubicación</h2>
+                    <div class="map-placeholder">
+                        <i class="fa-solid fa-map-location-dot map-icon"></i>
+                        <p class="map-text">Mapa interactivo</p>
+                        <p class="map-coordinates">
                             {{ property.latitude }}, {{ property.longitude }}
                         </p>
                     </div>
@@ -103,40 +95,35 @@
             </div>
 
             <!-- Formulario de contacto -->
-            <div class="space-y-6">
-                <div class="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
-                    <h3 class="text-xl font-bold text-gray-900 mb-6">Contactar al vendedor</h3>
-                    <form (ngSubmit)="handleSubmit()" #contactForm="ngForm" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nombre</label>
-                            <input type="text" [(ngModel)]="contactData.name" name="name"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition"
+            <div class="sidebar">
+                <div class="contact-card">
+                    <h3 class="contact-title">Contactar al vendedor</h3>
+                    <form (ngSubmit)="handleSubmit()" #contactForm="ngForm" class="contact-form">
+                        <div class="form-group">
+                            <label class="form-label">Nombre</label>
+                            <input type="text" [(ngModel)]="contactData.name" name="name" class="form-input"
                                 placeholder="Tu nombre" />
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" [(ngModel)]="contactData.email" name="email"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" [(ngModel)]="contactData.email" name="email" class="form-input"
                                 placeholder="tu@email.com" />
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Teléfono</label>
-                            <input type="tel" [(ngModel)]="contactData.phone" name="phone"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" [(ngModel)]="contactData.phone" name="phone" class="form-input"
                                 placeholder="+54 9 11 1234-5678" />
                         </div>
 
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Mensaje</label>
-                            <textarea rows="4" [(ngModel)]="contactData.message" name="message"
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 outline-none transition resize-none"
+                        <div class="form-group">
+                            <label class="form-label">Mensaje</label>
+                            <textarea rows="4" [(ngModel)]="contactData.message" name="message" class="form-textarea"
                                 placeholder="Me interesa esta propiedad..."></textarea>
                         </div>
 
-                        <button type="submit"
-                            class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 text-white py-3 rounded-lg font-semibold hover:from-emerald-600 hover:to-emerald-700 transition-all shadow-lg flex items-center justify-center gap-2">
+                        <button type="submit" class="submit-btn">
                             <i class="fa-solid fa-paper-plane"></i>
                             Enviar consulta
                         </button>

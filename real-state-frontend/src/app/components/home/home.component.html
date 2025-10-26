@@ -5,22 +5,13 @@
             <h1>Propiedades Excepcionales para Vidas Extraordinarias</h1>
             <p>Descubre residencias exclusivas en las ubicaciones más prestigiosas</p>
             <div class="search-box">
-                <input type="text" placeholder="Ciudad o ubicación">
-                <select>
-                    <option>Tipo de Propiedad</option>
-                    <option>Casa de Lujo</option>
-                    <option>Penthouse</option>
-                    <option>Villa</option>
-                    <option>Apartamento</option>
-                </select>
-                <select>
-                    <option>Rango de Precio</option>
-                    <option>$100k - $300k</option>
-                    <option>$300k - $500k</option>
-                    <option>$500k - $1M</option>
-                    <option>$1M+</option>
-                </select>
-                <button class="btn">Buscar</button>
+                <div class="mb-3">
+                    <select [(ngModel)]="ciudadSeleccionada" id="ubicacion" class="form-control">
+                        <option value="" disabled selected>Selecciona una ciudad</option>
+                        <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+                    </select>
+                </div>
+                <button class="btn" (click)="buscar()">Buscar</button>
             </div>
         </div>
     </section>

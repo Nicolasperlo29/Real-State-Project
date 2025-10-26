@@ -3,7 +3,7 @@ import { Property } from '../../interfaces/property';
 import { PropertyService } from '../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { PropertyFavoriteService } from '../../services/property-favorite.service';
 import { FavoritePropertyRequest } from '../../interfaces/favorite-property-request';
@@ -33,6 +33,7 @@ export class PropertyListComponent implements OnInit {
   minPrice: number = 0;
   maxPrice: number = 0;
   searchTerm: string = '';
+  ubicacion: string = '';
 
   // Tipos únicos
   propertyTypes: string[] = [];
@@ -41,12 +42,18 @@ export class PropertyListComponent implements OnInit {
     private propertyService: PropertyService,
     private userService: UserService,
     private propertyFavoriteService: PropertyFavoriteService,
-    private usuarioService: UsuariosService
-  ) {}
+    private usuarioService: UsuariosService,
+    private route: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
     this.loggedIn = this.userService.isLoggedIn();
-    this.fetchProperties();
+
+    // Suscribirse a queryParams
+    this.route.queryParams.subscribe(params => {
+      this.ubicacion = params['ubicacion'] || '';
+      this.fetchProperties();
+    });
 
     this.userService.getProfile().subscribe({
       next: (data) => {
@@ -57,16 +64,43 @@ export class PropertyListComponent implements OnInit {
     });
   }
 
+  // --- PAGINACIÓN ---
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredProperties.length / this.itemsPerPage);
+  }
+
+  get paginatedProperties(): Property[] {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    const end = start + this.itemsPerPage;
+    return this.filteredProperties.slice(start, end);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
   fetchProperties() {
     this.propertyService.getAllProperties().subscribe({
       next: (data) => {
-        this.properties = data;
-        console.log('Fetched properties:', data);
+        if (this.ubicacion) {
+          this.properties = data.filter(
+            p => p.city.toLowerCase() === this.ubicacion.toLowerCase()
+          );
+        } else {
+          this.properties = data;
+        }
         this.extractPropertyTypes();
       },
       error: (err) => console.error('Error fetching properties', err)
     });
   }
+
 
   loadUserWithFavorites(userId: number): void {
     this.usuarioService.getUserProfile(userId).subscribe({
@@ -123,6 +157,14 @@ export class PropertyListComponent implements OnInit {
     }
 
     return filtered;
+  }
+
+  filterByUbicacion(): void {
+    if (this.ubicacion) {
+      this.properties = this.properties.filter(p =>
+        p.city.toLowerCase() === this.ubicacion.toLowerCase()
+      );
+    }
   }
 
   resetFilters(): void {

@@ -11,6 +11,7 @@
   background: white;
   border-radius: 16px;
   padding: 2rem;
+  margin-top: 100px;
   margin-bottom: 2.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #e5e7eb;
@@ -150,58 +151,43 @@
   cursor: pointer;
 }
 
-/* ========== GRID DE PROPIEDADES ========== */
-.property-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+/* ========== LISTA DE PROPIEDADES (HORIZONTAL) ========== */
+.property-list {
+  display: flex;
+  flex-direction: column;
   gap: 2rem;
   margin-bottom: 3rem;
 }
 
-@media (min-width: 1400px) {
-  .property-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .property-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .filters-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filters-container {
-    padding: 1.5rem;
-  }
-}
-
-/* ========== TARJETAS DE PROPIEDAD ========== */
-.property-card {
+/* ========== TARJETAS DE PROPIEDAD HORIZONTALES ========== */
+.property-card-horizontal {
+  cursor: pointer;
+  width: 90%;
+  margin: 0 auto;
   background: white;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid #e5e7eb;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
+  /* min-height: 500px; */
+  height: 500px;
 }
 
-.property-card:hover {
+.property-card-horizontal:hover {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
   border-color: #d1d5db;
 }
 
 .property-image-container {
   position: relative;
-  width: 100%;
-  height: 280px;
+  width: 45%;
+  min-width: 400px;
   overflow: hidden;
   background: linear-gradient(135deg, #7877c6 0%, #5e5ba8 100%);
+  flex-shrink: 0;
 }
 
 .property-image {
@@ -211,7 +197,7 @@
   transition: transform 0.4s ease;
 }
 
-.property-card:hover .property-image {
+.property-card-horizontal:hover .property-image {
   transform: scale(1.05);
 }
 
@@ -327,22 +313,28 @@
 
 /* ========== DETALLES DE LA PROPIEDAD ========== */
 .property-details {
-  padding: 1.75rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
+  justify-content: space-between;
+}
+
+.property-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .property-title {
-  font-size: 1.375rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #111827;
-  margin: 0 0 0.75rem 0;
+  margin: 0;
   line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  flex: 1;
 }
 
 .property-location {
@@ -360,11 +352,12 @@
 }
 
 .property-price {
-  font-size: 1.75rem;
+  font-size: 1.875rem;
   font-weight: 800;
   color: #7877c6;
-  margin-bottom: 1rem;
+  margin: 0;
   letter-spacing: -0.5px;
+  white-space: nowrap;
 }
 
 .property-divider {
@@ -375,9 +368,9 @@
 }
 
 .property-info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
   margin-bottom: 1.5rem;
 }
 
@@ -388,7 +381,7 @@
   font-size: 0.9375rem;
   font-weight: 600;
   color: #374151;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem;
   background: #f9fafb;
   border-radius: 8px;
 }
@@ -403,23 +396,20 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  width: 100%;
   padding: 1rem;
-  background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
   color: white;
   text-align: center;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  margin-top: auto;
   border-radius: 10px;
   transition: all 0.3s;
   text-decoration: none;
   font-size: 0.875rem;
+  border: 1px solid black;
 }
 
 .view-details-button:hover {
-  background: linear-gradient(135deg, #111827 0%, #000000 100%);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -430,6 +420,45 @@
 
 .view-details-button:hover i {
   transform: translateX(4px);
+}
+
+/* ========== PAGINACIÓN ========== */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.pagination-container button {
+  background-color: #7877c6;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9375rem;
+}
+
+.pagination-container button:disabled {
+  background-color: #d1d5db;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-container button:hover:not(:disabled) {
+  background-color: #5e5ba8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(120, 119, 198, 0.3);
+}
+
+.pagination-info {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9375rem;
 }
 
 /* ========== ESTADO VACÍO ========== */
@@ -481,4 +510,51 @@
 .empty-button:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(120, 119, 198, 0.3);
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .property-image-container {
+    min-width: 350px;
+    width: 40%;
+  }
+  
+  .property-info {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .property-card-horizontal {
+    flex-direction: column;
+    min-height: auto;
+    height: 850px;
+  }
+  
+  .property-image-container {
+    width: 100%;
+    min-width: 100%;
+    height: 280px;
+  }
+  
+  .property-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .property-price {
+    font-size: 1.5rem;
+  }
+  
+  .filters-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters-container {
+    padding: 1.5rem;
+  }
+  
+  .property-details {
+    padding: 1.5rem;
+  }
 }
