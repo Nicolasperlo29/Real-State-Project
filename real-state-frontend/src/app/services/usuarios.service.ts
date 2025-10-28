@@ -17,4 +17,7 @@ export class UsuariosService {
     return this.http.get<UserWithFavorites>(`${this.apiUrl}/users/${userId}/profile`);
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.apiUrl + "/users");
+  }
 }

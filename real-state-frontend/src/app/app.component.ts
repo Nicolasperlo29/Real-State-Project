@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
 
@@ -14,9 +14,10 @@ export class AppComponent implements OnInit {
 
   user: any = null;
   loggedIn: boolean = false;
+   mobileMenuOpen: boolean = false;
 
   constructor(private authService: UserService) { }
-  
+
   ngOnInit() {
     if (this.authService.isLoggedIn()) {
       this.loggedIn = true;
@@ -24,6 +25,30 @@ export class AppComponent implements OnInit {
         this.user = user;
         console.log('Usuario cargado:', this.user);
       });
+    }
+  }
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll(): void {
+    const header = document.querySelector('header');
+    if (window.scrollY > 50) {
+      header?.classList.add('scrolled');
+    } else {
+      header?.classList.remove('scrolled');
+    }
+  }
+
+  @HostListener('window:resize', [])
+  onWindowResize(): void {
+    if (window.innerWidth > 768 && this.mobileMenuOpen) {
+      this.closeMobileMenu();
     }
   }
 }

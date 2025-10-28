@@ -32,10 +32,14 @@
                     </label>
                     <input type="text" id="title" formControlName="title"
                         placeholder="Ej: Departamento moderno en zona céntrica"
-                        [class.error]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">
+                        [class.error]="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched && propertyForm.get('title')?.errors?.['maxlength']">
                     <div class="error-message"
-                        *ngIf="propertyForm.get('title')?.invalid && propertyForm.get('title')?.touched">
-                        <small>El título es obligatorio</small>
+                        *ngIf="propertyForm.get('title')?.errors?.['required'] && propertyForm.get('title')?.touched">
+                        <small>El título es obligatorio.</small>
+                    </div>
+                    <div class="error-message"
+                        *ngIf="propertyForm.get('title')?.errors?.['maxlength']">
+                        <small>El título no puede tener mas de 78 letras.</small>
                     </div>
                 </div>
 

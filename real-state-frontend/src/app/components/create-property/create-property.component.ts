@@ -20,11 +20,11 @@ export class CreatePropertyComponent implements OnInit {
 
   ngOnInit(): void {
     this.propertyForm = this.fb.group({
-      title: ['', Validators.required],
+      title: ['', [Validators.required, Validators.maxLength(78)]],
       description: ['', Validators.required],
       city: ['', Validators.required],
       address: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
+      price: [0, [Validators.required, Validators.min(1)]],
       areaCubierta: [0, [Validators.required, Validators.min(0)]],
       areaTotal: [0, [Validators.required, Validators.min(0)]],
       rooms: [1, [Validators.required, Validators.min(1)]],

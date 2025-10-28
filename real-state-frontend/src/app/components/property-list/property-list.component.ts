@@ -203,6 +203,7 @@ export class PropertyListComponent implements OnInit {
   nextImage(property: any) {
     if (!property.currentImageIndex) property.currentImageIndex = 0;
     property.currentImageIndex = (property.currentImageIndex + 1) % property.images.length;
+    console.log(property.images[property.currentImageIndex]);
   }
 
   prevImage(property: any) {

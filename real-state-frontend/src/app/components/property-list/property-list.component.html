@@ -3,7 +3,6 @@
     <div class="filters-container">
         <div class="filters-header">
             <h2 class="filters-title">
-                <i class="fa-solid fa-heart"></i>
                 Propiedades
             </h2>
             <button class="reset-btn" (click)="resetFilters()"
@@ -73,12 +72,12 @@
             [routerLink]="['/property', property.id]">
             <div class="property-image-container">
                 <img *ngIf="property.images.length > 0" [src]="property.images[property.currentImageIndex || 0].url"
-                    [alt]="property.title" class="property-image" />
+                    class="property-image" />
 
                 <div class="property-type-badge">{{ property.type }}</div>
                 @if (loggedIn) {
                 <button class="favorite-btn" [class.active]="isFavorite(property.id)"
-                    (click)="toggleFavorite(property.id)"
+                    (click)="toggleFavorite(property.id); $event.stopPropagation()"
                     [title]="isFavorite(property.id) ? 'Eliminar de favoritos' : 'Agregar a favoritos'">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
                         stroke-width="2">
@@ -89,10 +88,12 @@
                 </button>
                 }
 
-                <button class="arrow left" (click)="prevImage(property)" *ngIf="property.images.length > 1">
+                <button class="arrow left" (click)="prevImage(property); $event.stopPropagation()"
+                    *ngIf="property.images.length > 1">
                     <i class="fa-solid fa-chevron-left"></i>
                 </button>
-                <button class="arrow right" (click)="nextImage(property)" *ngIf="property.images.length > 1">
+                <button class="arrow right" (click)="nextImage(property); $event.stopPropagation()"
+                    *ngIf="property.images.length > 1">
                     <i class="fa-solid fa-chevron-right"></i>
                 </button>
 
@@ -109,7 +110,7 @@
 
                 <p class="property-location">
                     <i class="fa-solid fa-location-dot"></i>
-                    <span>📍 {{ property.address }}, {{ property.city }}</span>
+                    <span> {{ property.address }}, {{ property.city }}</span>
                 </p>
 
                 <p class="property-location">
@@ -121,27 +122,29 @@
                 <div class="property-info">
                     <span class="property-info-item">
                         <i class="fa-solid fa-house"></i>
-                        <span>🏠 {{ property.areaCubierta }}m² cubiertos</span>
+                        <span> {{ property.areaCubierta }}m² cubiertos</span>
                     </span>
                     <span class="property-info-item" *ngIf="property.areaTotal > 0">
                         <i class="fa-solid fa-maximize"></i>
-                        <span>🌳 {{ property.areaTotal }}m² totales</span>
+                        <span> {{ property.areaTotal }}m² totales</span>
                     </span>
                     <span class="property-info-item">
                         <i class="fa-solid fa-bed"></i>
-                        <span>🛏️ {{ property.rooms }} dormitorios</span>
+                        <span> {{ property.rooms }} dormitorios</span>
                     </span>
                     <span class="property-info-item">
                         <i class="fa-solid fa-bath"></i>
-                        <span>🚿 {{ property.bathrooms }} baños</span>
+                        <span> {{ property.bathrooms }} baños</span>
                     </span>
                 </div>
 
                 <div style="display: flex; gap: 10px; justify-content: end;">
-                    <a [routerLink]="['/property', property.id]" class="view-details-button" style="background-color: orangered;">
+                    <a [routerLink]="['/property', property.id]" class="view-details-button"
+                        style="background-color: orangered;">
                         Contactar
                     </a>
-                    <a [routerLink]="['/property', property.id]" class="view-details-button" style="background-color: green;">
+                    <a [routerLink]="['/property', property.id]" class="view-details-button"
+                        style="background-color: green;">
                         Whatsapp
                     </a>
                     <a [routerLink]="['/property', property.id]" class="view-details-button" style="color: black;">

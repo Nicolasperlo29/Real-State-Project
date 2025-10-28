@@ -1,19 +1,56 @@
 <header>
   <nav>
-    <div class="logo">LUXE</div>
-    <ul>
-      <li><a href="#inicio">Inicio</a></li>
-      <li><a [routerLink]="['/list']">Propiedades</a></li>
-      <li><a [routerLink]="['/create']">Publicar</a></li>
+    <div class="logo" [routerLink]="['']">
+      <span class="logo-text">LUXE</span>
+      <span class="logo-tagline">Properties</span>
+    </div>
+
+    <!-- Desktop Menu -->
+    <ul class="nav-desktop">
+      <li><a [routerLink]="['/list']" routerLinkActive="active">Propiedades</a></li>
+      <li><a [routerLink]="['/chat']" routerLinkActive="active">Chat</a></li>
+      <li><a [routerLink]="['/create']" routerLinkActive="active">Publicar</a></li>
       @if (loggedIn) {
-      <a [routerLink]="['/profile']">Perfil</a>
+      <li class="icon-item">
+        <i class="fa-solid fa-bell campanita" [routerLink]="['/notifications']">
+          <span class="notification-badge">3</span>
+        </i>
+      </li>
+      <li class="icon-item">
+        <i class="fa-solid fa-user profile" [routerLink]="['/profile']"></i>
+      </li>
       }
       @if (!loggedIn) {
-      <li><a [routerLink]="['/register']">Registrarse</a></li>
-      <li><a [routerLink]="['/login']">Login</a></li>
+      <li><a [routerLink]="['/register']" routerLinkActive="active" class="btn-register">Registrarse</a></li>
+      <li><a [routerLink]="['/login']" routerLinkActive="active" class="btn-login">Login</a></li>
       }
     </ul>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+      <i [class]="mobileMenuOpen ? 'fa-solid fa-times' : 'fa-solid fa-bars'"></i>
+    </button>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" [class.open]="mobileMenuOpen">
+    <ul>
+      <li><a [routerLink]="['/list']" (click)="closeMobileMenu()">Propiedades</a></li>
+      <li><a [routerLink]="['/create']" (click)="closeMobileMenu()">Publicar</a></li>
+      @if (loggedIn) {
+      <li><a [routerLink]="['/notifications']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-bell"></i> Notificaciones
+        </a></li>
+      <li><a [routerLink]="['/profile']" (click)="closeMobileMenu()">
+          <i class="fa-solid fa-user"></i> Perfil
+        </a></li>
+      }
+      @if (!loggedIn) {
+      <li><a [routerLink]="['/register']" (click)="closeMobileMenu()" class="btn-register">Registrarse</a></li>
+      <li><a [routerLink]="['/login']" (click)="closeMobileMenu()" class="btn-login">Login</a></li>
+      }
+    </ul>
+  </div>
 </header>
 
 <router-outlet></router-outlet>
@@ -23,6 +60,12 @@
     <div class="footer-section">
       <h3>LUXE Properties</h3>
       <p>Redefiniendo el estándar del mercado inmobiliario de lujo desde 1995</p>
+      <div class="social-icons">
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+      </div>
     </div>
     <div class="footer-section">
       <h3>Navegación</h3>
@@ -33,9 +76,9 @@
     </div>
     <div class="footer-section">
       <h3>Contacto</h3>
-      <p>📞 +54 11 5555-8888</p>
-      <p>📧 infoluxeproperties.com</p>
-      <p>📍 Av. Libertador 1234, CABA</p>
+      <p><i class="fa-solid fa-phone"></i> +54 11 5555-8888</p>
+      <p><i class="fa-solid fa-envelope"></i> infoluxeproperties.com</p>
+      <p><i class="fa-solid fa-location-dot"></i> Av. Libertador 1234, CABA</p>
     </div>
     <div class="footer-section">
       <h3>Horarios</h3>
@@ -45,6 +88,11 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© 2025 LUXE Properties. Todos los derechos reservados. | Diseño Premium</p>
+    <p>© 2025 LUXE Properties. Todos los derechos reservados.</p>
+    <div class="footer-links">
+      <a href="#">Términos y Condiciones</a>
+      <span>|</span>
+      <a href="#">Política de Privacidad</a>
+    </div>
   </div>
 </footer>
