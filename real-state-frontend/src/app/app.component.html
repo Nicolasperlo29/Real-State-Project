@@ -11,14 +11,33 @@
       <li><a [routerLink]="['/chat']" routerLinkActive="active">Chat</a></li>
       <li><a [routerLink]="['/create']" routerLinkActive="active">Publicar</a></li>
       @if (loggedIn) {
-      <li class="icon-item">
+      <!-- <li class="icon-item">
         <i class="fa-solid fa-bell campanita" [routerLink]="['/notifications']">
           <span class="notification-badge">3</span>
         </i>
-      </li>
+      </li> -->
       <li class="icon-item">
         <i class="fa-solid fa-user profile" [routerLink]="['/profile']"></i>
       </li>
+
+      <div class="nav-item dropdown">
+        <i class="fa-solid fa-bell campanita" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="notification-badge">3</span>
+        </i>
+        <ul class="dropdown-menu dropdown-menu-end p-2" style="width: 300px; height: 300px;">
+          <!-- @if (notifications.length > 0) {
+          @for (item of notifications; track $index) {
+          <li class="d-flex justify-content-between gap-3 border-bottom mb-2 pb-1">
+            <strong style="font-size: 14px;">{{ item.asunto | slice:0:10 }}...</strong>
+            <small class="text-muted">{{ item.fechaEnvio | date }}</small>
+            <button class="btn btn-danger" [routerLink]="['/notifications']">Ver</button>
+          </li>
+          }
+          }
+          @if (notifications.length <= 0) { <p>No hay notificaciones</p>
+            } -->
+        </ul>
+      </div>
       }
       @if (!loggedIn) {
       <li><a [routerLink]="['/register']" routerLinkActive="active" class="btn-register">Registrarse</a></li>

@@ -41,4 +41,12 @@ public class UserController {
         return userService.getUserWithFavoritesReactive(userId);
     }
 
+    @GetMapping("/{id}/email")
+    public ResponseEntity<String> getUserEmail(@PathVariable Long id) {
+        UserEntity user = userService.getUserById(id);
+        if (user == null || user.getEmail() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(user.getEmail());
+    }
 }

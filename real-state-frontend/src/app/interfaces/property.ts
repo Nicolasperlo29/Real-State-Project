@@ -8,6 +8,7 @@ export interface Property {
     address: string;
     price: number;
     areaCubierta: number;
+    userId: number;
     areaTotal: number;
     rooms: number;
     bathrooms: number;

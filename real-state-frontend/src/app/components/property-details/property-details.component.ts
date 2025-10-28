@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { PropertyService } from '../../services/property.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { UsuariosService } from '../../services/usuarios.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-property-details',
@@ -22,6 +24,7 @@ export class PropertyDetailsComponent implements OnInit {
     address: '',
     price: 0,
     areaCubierta: 0,
+    userId: 0,
     areaTotal: 0,
     rooms: 0,
     bathrooms: 0,
@@ -35,6 +38,7 @@ export class PropertyDetailsComponent implements OnInit {
   currentImage = 0;
 
   isFavorite = false;
+  userEmail: string = '';
 
   contactData = {
     name: '',
@@ -45,12 +49,19 @@ export class PropertyDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private propertyService: PropertyService
+    private propertyService: PropertyService,
+    private usuarioService: UsuariosService,
+    private userService: UserService
   ) { }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadProperty(id);
+    this.userService.getProfile().subscribe({
+      next: (data) => {
+        this.userEmail = data.email
+      }
+    })
   }
 
   loadProperty(id: number) {
@@ -74,9 +85,27 @@ export class PropertyDetailsComponent implements OnInit {
   }
 
   handleSubmit() {
-    alert('Consulta enviada correctamente');
-    this.contactData = { name: '', email: '', phone: '', message: '' };
+    const payload = {
+      ownerId: this.property.userId,
+      propertyTitle: this.property.title,
+      subject: "Consulta por: " + this.property.title,
+      messageText: this.contactData.message,
+      senderName: this.contactData.name,
+      senderEmail: this.userEmail,
+      senderPhone: this.contactData.phone
+    };
+
+    this.propertyService.sendContactEmail(payload).subscribe({
+      next: () => {
+        alert('Mensaje enviado correctamente al propietario');
+        this.contactData = { name: '', email: '', phone: '', message: '' };
+      },
+      error: (err) => {
+        alert('Error al enviar el mensaje: ' + err.message);
+      }
+    });
   }
+
 
   prevImage() {
     if (!this.property.images?.length) return;
@@ -87,4 +116,5 @@ export class PropertyDetailsComponent implements OnInit {
     if (!this.property.images?.length) return;
     this.currentImage = (this.currentImage + 1) % this.property.images.length;
   }
+
 }

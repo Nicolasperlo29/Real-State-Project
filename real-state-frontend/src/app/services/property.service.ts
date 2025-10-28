@@ -27,4 +27,8 @@ export class PropertyService {
   createProperty(property: Property): Observable<Property> {
     return this.http.post<Property>(this.apiUrl + '/create', property);
   }
+
+  sendContactEmail(contactData: any) {
+    return this.http.post('http://localhost:8084/api/contact', contactData);
+  }
 }
