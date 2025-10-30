@@ -41,20 +41,25 @@ public class UserServiceImpl implements UserService {
 
         List<FavoriteProperty> favoriteEntities = favoritePropertyRepository.findByUserId(userId);
 
-        // Para cada propiedad favorita hacemos una llamada reactiva
+        // Si no hay favoritos, devolvemos un Mono con lista vacía
+        if (favoriteEntities.isEmpty()) {
+            return Mono.just(new UserWithFavoritesDTO(
+                    user.getId(),
+                    user.getFullName(),
+                    user.getEmail(),
+                    user.getPhone(),
+                    user.getProfileImageUrl(),
+                    List.of() // lista vacía, nunca null
+            ));
+        }
+
         List<Mono<FavoritePropertyDTO>> favoriteMonos = favoriteEntities.stream()
                 .map(fav -> webClient.get()
                         .uri(PROPERTY_SERVICE_URL + "/" + fav.getPropertyId())
                         .retrieve()
                         .bodyToMono(PropertyDTO.class)
-                        .map(property -> {
-                            System.out.println("Propiedad obtenida para favoriteId " + fav.getPropertyId() + ": " + property);
-                            return new FavoritePropertyDTO(fav.getPropertyId(), property);
-                        })
-                        .onErrorResume(e -> {
-                            System.out.println("Error obteniendo propiedad " + fav.getPropertyId() + ": " + e.getMessage());
-                            return Mono.just(new FavoritePropertyDTO(fav.getPropertyId(), null));
-                        })
+                        .map(property -> new FavoritePropertyDTO(fav.getPropertyId(), property))
+                        .onErrorResume(e -> Mono.just(new FavoritePropertyDTO(fav.getPropertyId(), null)))
                 )
                 .collect(Collectors.toList());
 

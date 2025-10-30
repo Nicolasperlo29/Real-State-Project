@@ -70,11 +70,25 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   loadUsers() {
-    this.usuariosService.getAllUsers().subscribe({
-      next: (data) => {
-        this.usuarios = data.filter(u => u.id !== this.messageService.getUserId());
+    const tryLoad = () => {
+      const currentUserId = this.messageService.getUserId();
+
+      if (!currentUserId) {
+        // Esperar un poco y volver a intentar
+        setTimeout(tryLoad, 100);
+        return;
       }
-    });
+
+      this.usuariosService.getAllUsers().subscribe({
+        next: (data) => {
+          this.usuarios = data.filter(u => u.id !== currentUserId);
+          console.log('Usuarios:', this.usuarios);
+        },
+        error: (err) => console.error('Error al cargar usuarios:', err)
+      });
+    };
+
+    tryLoad();
   }
 
   seleccionar(user: User) {

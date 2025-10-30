@@ -21,7 +21,7 @@ export class UserService {
   login(request: LoginRequest): Observable<any> {
     return this.http.post(`${this.apiUrl}/login`, request).pipe(
       tap((response: any) => {
-        localStorage.setItem('token', response.accessToken);
+        localStorage.setItem('token', response.token);
         localStorage.setItem('refreshToken', response.refreshToken);
       })
     );
@@ -34,8 +34,9 @@ export class UserService {
   refreshToken(): Observable<string> {
     const refreshToken = localStorage.getItem('refreshToken');
     return this.http.post(`${this.apiUrl}/refresh`, { refreshToken }, { responseType: 'text' }).pipe(
-      tap((newToken) => {
-        localStorage.setItem('token', newToken);
+      tap((response: any) => {
+        localStorage.setItem('token', response.token || response.accessToken);
+        localStorage.setItem('refreshToken', response.refreshToken);
       })
     );
   }

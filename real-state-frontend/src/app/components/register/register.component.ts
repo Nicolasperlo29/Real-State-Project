@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ export class RegisterComponent implements OnInit {
   form!: FormGroup;
   submitted = false;
 
-  constructor(private fb: FormBuilder, private userService: UserService) {
+  constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.form = this.fb.group({
       fullname: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
@@ -59,11 +60,7 @@ export class RegisterComponent implements OnInit {
         console.log('Usuario registrado', response);
         this.userService.login({ email, password }).subscribe({
           next: (loginResponse) => {
-            console.log('Usuario logueado', loginResponse);
-            localStorage.setItem('user', JSON.stringify(loginResponse));
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('email', email);
-            window.location.href = '/properties';
+            this.router.navigate(['/properties']);
           },
           error: (loginError) => {
             console.error('Error al loguear usuario', loginError);

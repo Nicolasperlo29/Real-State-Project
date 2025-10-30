@@ -6,27 +6,18 @@ import { catchError, switchMap, throwError } from 'rxjs';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(UserService);
-  const token = authService.getAccessToken();
-  const refreshToken = authService.getRefreshToken();
+  const token = authService.getAccessToken(); // debe leer token actualizado
 
-  let clonedReq = req;
-
-  if (token) {
-    clonedReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  }
+  const clonedReq = token
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : req;
 
   return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      if (error.status === 401 && refreshToken) {
+      if (error.status === 401 && authService.getRefreshToken()) {
         return authService.refreshToken().pipe(
           switchMap((newToken) => {
-            const newReq = req.clone({
-              setHeaders: { Authorization: `Bearer ${newToken}` },
-            });
+            const newReq = req.clone({ setHeaders: { Authorization: `Bearer ${newToken}` } });
             return next(newReq);
           }),
           catchError(() => {
