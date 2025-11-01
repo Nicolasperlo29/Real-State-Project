@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.propertyService.getAllProperties().subscribe(data => {
-      this.properties = data;
+      this.properties = data.slice(0, 3);
     });
 
     this.ubicacionService.getCiudades(this.pais).subscribe(response => {

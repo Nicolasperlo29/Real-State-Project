@@ -2,44 +2,48 @@
 
     <section class="hero" id="inicio">
         <div class="hero-content">
-            <h1>Propiedades Excepcionales para Vidas Extraordinarias</h1>
-            <p>Descubre residencias exclusivas en las ubicaciones más prestigiosas</p>
+            <h1>Elite Properties</h1>
+            <p>Residencias excepcionales para clientes distinguidos</p>
             <div class="search-box">
-                <div class="mb-3">
-                    <select [(ngModel)]="ciudadSeleccionada" id="ubicacion" class="form-control">
-                        <option value="" disabled selected>Selecciona una ciudad</option>
-                        <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
-                    </select>
-                </div>
-                <button class="btn" (click)="buscar()">Buscar</button>
+                <select [(ngModel)]="ciudadSeleccionada" id="ubicacion" class="form-control">
+                    <option value="" disabled selected>Selecciona una ciudad</option>
+                    <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
+                </select>
+                <button class="btn" onclick="buscar()">Explorar</button>
             </div>
         </div>
+        <div class="scroll-indicator"></div>
     </section>
 
     <section class="features" id="servicios">
         <div class="features-container">
-            <h2 class="section-title">Servicio Premium</h2>
-            <p class="section-subtitle">Experiencia exclusiva en cada detalle</p>
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Excelencia en cada detalle</p>
             <div class="features-grid">
                 <div class="feature-card">
-                    <div class="feature-icon">🏆</div>
-                    <h3>Propiedades Exclusivas</h3>
-                    <p>Acceso a las residencias más codiciadas y exclusivas del mercado inmobiliario de lujo</p>
+                    <div class="feature-icon">🏛️</div>
+                    <h3>Portfolio Selecto</h3>
+                    <p>Acceso exclusivo a propiedades únicas cuidadosamente seleccionadas en los mercados más
+                        prestigiosos del
+                        mundo.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">👨‍💼</div>
-                    <h3>Asesores Expertos</h3>
-                    <p>Equipo especializado con décadas de experiencia en bienes raíces premium</p>
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Asesoría Legal</h3>
+                    <p>Soporte jurídico completo para garantizar transacciones seguras y transparentes en cada
+                        operación.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>Máxima Privacidad</h3>
-                    <p>Transacciones discretas y confidenciales con la más alta seguridad</p>
+                    <div class="feature-icon">💎</div>
+                    <h3>Servicio Personalizado</h3>
+                    <p>Atención individual adaptada a sus necesidades específicas con el más alto nivel de
+                        profesionalismo.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🌐</div>
-                    <h3>Red Global</h3>
-                    <p>Presencia internacional con propiedades en los destinos más exclusivos</p>
+                    <div class="feature-icon">🌍</div>
+                    <h3>Alcance Global</h3>
+                    <p>Red internacional de contactos y propiedades en las ciudades más exclusivas de cinco continentes.
+                    </p>
                 </div>
             </div>
         </div>
@@ -47,68 +51,42 @@
 
     <section class="properties" id="propiedades">
         <div class="properties-container">
-            <h2 class="section-title">Propiedades Destacadas</h2>
-            <p class="section-subtitle">Colección curada de residencias excepcionales</p>
+            <h2 class="section-title">Colección Destacada</h2>
+            <p class="section-subtitle">Residencias de distinción excepcional</p>
+
             <div class="properties-grid">
+                @for (property of properties; track $index) {
                 <div class="property-card">
                     <div class="property-image">
-                        🏰
-                        <div class="property-badge">EXCLUSIVO</div>
+                        <img [src]="property.images[0]?.url" [alt]="property.title" />
+                        <div class="property-badge">{{ property.status }}</div>
                     </div>
                     <div class="property-info">
-                        <div class="property-price">$2,850,000</div>
-                        <h3 class="property-title">Villa Mediterránea con Vista al Mar</h3>
-                        <p class="property-location">📍 Puerto Madero, Buenos Aires</p>
+                        <div class="property-price">
+                            USD {{ property.price | number:'1.0-0' }}
+                        </div>
+                        <h3 class="property-title">{{ property.title }}</h3>
+                        <p class="property-location">
+                            📍 {{ property.address }}, {{ property.city }}
+                        </p>
                         <div class="property-details">
-                            <span>🛏️ 5 Suites</span>
-                            <span>🚿 6 Baños</span>
-                            <span>📐 650 m²</span>
+                            <span>{{ property.rooms }} dorm.</span>
+                            <span>{{ property.bathrooms }} Baños</span>
+                            <span>{{ property.areaTotal }}m² cubiertos</span>
                         </div>
                     </div>
                 </div>
-
-                <div class="property-card">
-                    <div class="property-image">
-                        🏢
-                        <div class="property-badge">NUEVO</div>
-                    </div>
-                    <div class="property-info">
-                        <div class="property-price">$1,750,000</div>
-                        <h3 class="property-title">Penthouse Ultra Moderno con Terraza</h3>
-                        <p class="property-location">📍 Recoleta, Buenos Aires</p>
-                        <div class="property-details">
-                            <span>🛏️ 4 Suites</span>
-                            <span>🚿 4 Baños</span>
-                            <span>📐 380 m²</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="property-card">
-                    <div class="property-image">
-                        🏡
-                        <div class="property-badge">PREMIUM</div>
-                    </div>
-                    <div class="property-info">
-                        <div class="property-price">$3,200,000</div>
-                        <h3 class="property-title">Mansión Colonial con Viñedo Privado</h3>
-                        <p class="property-location">📍 Mendoza, Argentina</p>
-                        <div class="property-details">
-                            <span>🛏️ 6 Suites</span>
-                            <span>🚿 7 Baños</span>
-                            <span>📐 850 m²</span>
-                        </div>
-                    </div>
-                </div>
+                }
             </div>
         </div>
     </section>
 
+
     <section class="cta-section">
         <div class="cta-content">
-            <h2>¿Listo para Encontrar tu Hogar Ideal?</h2>
-            <p>Agenda una consulta personalizada con nuestros expertos</p>
-            <button class="cta-btn">Contactar Asesor</button>
+            <h2>Comience su Búsqueda</h2>
+            <p>Permítanos ayudarle a encontrar la propiedad perfecta que refleje su estilo de vida</p>
+            <button class="cta-btn" onclick="contactar()">Agendar Consulta</button>
         </div>
     </section>
 </body>

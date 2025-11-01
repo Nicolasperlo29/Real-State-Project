@@ -78,7 +78,7 @@ export class ProfileComponent implements OnInit {
   }
 
   goToProperties(): void {
-    this.router.navigate(['/properties']);
+    this.router.navigate(['/list']);
   }
 
   toggleFavorite(propertyId: number): void {
