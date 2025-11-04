@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { UserService } from './services/user.service';
+import { User } from './interfaces/user';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,9 @@ import { UserService } from './services/user.service';
 export class AppComponent implements OnInit {
   title = 'real-state-frontend';
 
-  user: any = null;
+  user?: User;
   loggedIn: boolean = false;
-   mobileMenuOpen: boolean = false;
+  mobileMenuOpen: boolean = false;
 
   constructor(private authService: UserService) { }
 

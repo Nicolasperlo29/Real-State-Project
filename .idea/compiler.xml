@@ -11,6 +11,7 @@
         <module name="Message-service" />
         <module name="user-service" />
         <module name="Auth-Service" />
+        <module name="agenda-service" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,6 +20,7 @@
       <module name="Auth-Service" options="-parameters" />
       <module name="Message-service" options="-parameters" />
       <module name="RealState" options="-parameters" />
+      <module name="agenda-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

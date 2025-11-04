@@ -56,7 +56,7 @@
 
             <div class="properties-grid">
                 @for (property of properties; track $index) {
-                <div class="property-card">
+                <div class="property-card" [routerLink]="['/property', property.id]">
                     <div class="property-image">
                         <img [src]="property.images[0]?.url" [alt]="property.title" />
                         <div class="property-badge">{{ property.status }}</div>
@@ -86,7 +86,33 @@
         <div class="cta-content">
             <h2>Comience su Búsqueda</h2>
             <p>Permítanos ayudarle a encontrar la propiedad perfecta que refleje su estilo de vida</p>
-            <button class="cta-btn" onclick="contactar()">Agendar Consulta</button>
+            <button class="cta-btn" (click)="contactar()">Agendar Consulta</button>
         </div>
     </section>
 </body>
+
+@if (modal) {
+<div class="modal-backdrop">
+    <div class="modal-content">
+        <h1>Agendar Consulta</h1>
+        <form (ngSubmit)="agendarConsulta()" #consultaForm="ngForm">
+            <label for="asunto">Asunto (Opcional)</label>
+            <textarea id="asunto" name="asunto" [(ngModel)]="asunto"
+                placeholder="Contanos brevemente de qué te gustaría hablar con nuestro asesor..." rows="3">
+            </textarea>
+
+            <label for="fecha">Fecha</label>
+            <input type="date" id="fecha" name="fecha" [(ngModel)]="fecha" min="{{ today }}" required
+                (change)="cargarHorariosDisponibles()">
+
+            <label for="hora">Hora</label>
+            <select id="hora" name="hora" [(ngModel)]="hora" required>
+                <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
+            </select>
+
+            <button type="submit" [disabled]="!consultaForm.form.valid">Agendar</button>
+            <button type="button" (click)="cerrarModal()">Cancelar</button>
+        </form>
+    </div>
+</div>
+}

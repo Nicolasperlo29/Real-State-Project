@@ -66,7 +66,12 @@ public class AuthServiceImpl implements AuthService {
         user.setFullname(request.getFullname());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole(Role.USER); // asigna un rol por defecto
+        if (request.getRole() == null) {
+            user.setRole(Role.USER);
+        }
+        else {
+            user.setRole(request.getRole());
+        }
         user.setActive(true);
         user.setAcceptTerms(request.getAcceptTerms());
 
@@ -77,7 +82,8 @@ public class AuthServiceImpl implements AuthService {
         UserCreatedEvent event = new UserCreatedEvent(
                 savedUser.getFullname(),
                 savedUser.getId(),
-                savedUser.getEmail()
+                savedUser.getEmail(),
+                savedUser.getRole()
         );
 
 //        rabbitTemplate.convertAndSend(exchange.getName(), "user.created", event);

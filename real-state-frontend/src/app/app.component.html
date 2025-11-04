@@ -9,7 +9,9 @@
     <ul class="nav-desktop">
       <li><a [routerLink]="['/list']" routerLinkActive="active">Propiedades</a></li>
       <li><a [routerLink]="['/chat']" routerLinkActive="active">Chat</a></li>
-      <li><a [routerLink]="['/create']" routerLinkActive="active">Publicar</a></li>
+      @if (user?.role === "AGENT" || user?.role === "ADMIN") {
+        <li><a [routerLink]="['/create']" routerLinkActive="active">Publicar</a></li>
+      }
       @if (loggedIn) {
       <!-- <li class="icon-item">
         <i class="fa-solid fa-bell campanita" [routerLink]="['/notifications']">
@@ -42,6 +44,9 @@
       @if (!loggedIn) {
       <li><a [routerLink]="['/register']" routerLinkActive="active" class="btn-register">Registrarse</a></li>
       <li><a [routerLink]="['/login']" routerLinkActive="active" class="btn-login">Login</a></li>
+      }
+      @if (user?.role === "ADMIN") {
+        <button class="btn btn-primary" [routerLink]="['/admin']">Configuracion</button>
       }
     </ul>
 

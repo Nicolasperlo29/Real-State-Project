@@ -4,6 +4,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.example.usuarios.domain.Role;
 
 @Data
 public class UserRequest {
@@ -19,4 +20,6 @@ public class UserRequest {
     private String password;
 
     private Boolean acceptTerms;
+
+    private Role role;
 }

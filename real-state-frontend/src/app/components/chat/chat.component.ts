@@ -81,7 +81,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
 
       this.usuariosService.getAllUsers().subscribe({
         next: (data) => {
-          this.usuarios = data.filter(u => u.id !== currentUserId);
+          this.usuarios = data.filter(u => u.id !== currentUserId && u.role === 'AGENT');
           console.log('Usuarios:', this.usuarios);
         },
         error: (err) => console.error('Error al cargar usuarios:', err)
