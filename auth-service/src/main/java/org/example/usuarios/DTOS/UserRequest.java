@@ -9,7 +9,7 @@ import org.example.usuarios.domain.Role;
 @Data
 public class UserRequest {
     @NotBlank(message = "El nombre es obligatorio")
-    private String fullname;
+    private String fullName;
 
     @NotBlank(message = "El email es obligatorio")
     @Email(message = "Email no válido")

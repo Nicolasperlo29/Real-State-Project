@@ -1,6 +1,6 @@
 export interface UserRequest {
 
-    fullname: string
+    fullName: string
     acceptTerms: boolean
     email: string
     password: string

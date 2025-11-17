@@ -7,6 +7,7 @@ import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
 import { UsuariosService } from '../../services/usuarios.service';
 import { HttpClient } from '@angular/common/http';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-chat',
@@ -30,6 +31,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
   constructor(
     public messageService: MessageSocketService,
     private usuariosService: UsuariosService,
+    private userService: UserService,
     private http: HttpClient,
     private cdr: ChangeDetectorRef,
   ) { }
@@ -79,7 +81,7 @@ export class ChatComponent implements OnInit, OnDestroy, AfterViewChecked {
         return;
       }
 
-      this.usuariosService.getAllUsers().subscribe({
+      this.userService.getUsers().subscribe({
         next: (data) => {
           this.usuarios = data.filter(u => u.id !== currentUserId && u.role === 'AGENT');
           console.log('Usuarios:', this.usuarios);

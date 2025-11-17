@@ -21,7 +21,7 @@ public class AuthUserEntity {
     private Long id;
 
     @Column
-    private String fullname;
+    private String fullName;
 
     @Column(nullable = false, unique = true)
     private String email;

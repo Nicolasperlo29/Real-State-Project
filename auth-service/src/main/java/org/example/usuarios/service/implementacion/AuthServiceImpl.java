@@ -35,7 +35,7 @@ public class AuthServiceImpl implements AuthService {
     public UserDTO register(UserRequest request) {
 
         // Validación del email
-        if (request.getFullname() == null || request.getFullname().isEmpty()) {
+        if (request.getFullName() == null || request.getFullName().isEmpty()) {
             throw new InvalidNameException("El nombre es obligatorio");
         }
 
@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Crear usuario
         AuthUserEntity user = new AuthUserEntity();
-        user.setFullname(request.getFullname());
+        user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         if (request.getRole() == null) {
@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
 
         UserCreatedEvent event = new UserCreatedEvent(
-                savedUser.getFullname(),
+                savedUser.getFullName(),
                 savedUser.getId(),
                 savedUser.getEmail(),
                 savedUser.getRole()

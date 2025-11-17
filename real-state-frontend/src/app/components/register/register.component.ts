@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(private fb: FormBuilder, private userService: UserService, private router: Router) {
     this.form = this.fb.group({
-      fullname: ['', [Validators.required, Validators.minLength(3)]],
+      fullName: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       // phone: ['', [Validators.pattern(/^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -53,9 +53,9 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const { fullname, acceptTerms, email, password } = this.form.value;
+    const { fullName, acceptTerms, email, password } = this.form.value;
 
-    this.userService.registerUser({ fullname, acceptTerms, email, password }).subscribe({
+    this.userService.registerUser({ fullName, acceptTerms, email, password }).subscribe({
       next: (response) => {
         console.log('Usuario registrado', response);
         this.userService.login({ email, password }).subscribe({
