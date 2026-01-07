@@ -17,10 +17,16 @@ public class EmailServiceImpl implements EmailService {
     public void sendMessageToOwner(ContactRequest request) {
 
         // Obtener email del propietario desde microservicio de usuarios
-        String ownerEmail = restTemplate.getForObject(
-                "http://localhost:8082/users/" + request.getOwnerId() + "/email",
-                String.class
-        );
+        String ownerEmail;
+
+        try {
+            ownerEmail = restTemplate.getForObject(
+                    "http://localhost:8082/users/" + request.getOwnerId() + "/email",
+                    String.class
+            );
+        } catch (Exception e) {
+            throw new RuntimeException("Error comunicándose con user-service", e);
+        }
 
         if (ownerEmail == null || ownerEmail.isEmpty()) {
             throw new RuntimeException("No se pudo obtener el email del propietario");

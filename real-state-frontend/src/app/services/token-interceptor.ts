@@ -1,12 +1,15 @@
 // src/app/interceptors/token.interceptor.ts
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { UserService } from './user.service'; 
+import { UserService } from './user.service';
 import { catchError, switchMap, throwError } from 'rxjs';
 
 export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(UserService);
   const token = authService.getAccessToken(); // debe leer token actualizado
+
+  console.log('TOKEN ACTUAL:', token);
+  console.log('URL:', req.url);
 
   const clonedReq = token
     ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })

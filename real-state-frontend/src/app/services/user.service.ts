@@ -10,7 +10,8 @@ import { User } from '../interfaces/user';
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:8081/auth';
+  // private apiUrl = 'http://localhost:8081/auth';
+  private apiUrl = 'http://localhost:8080/auth';
 
   constructor(private http: HttpClient) { }
 

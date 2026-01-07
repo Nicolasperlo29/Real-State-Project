@@ -48,19 +48,28 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<?> getCurrentUser(Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("No autenticado");
+    public ResponseEntity<?> getCurrentUser(
+            @RequestHeader(value = "X-User-Id", required = false) String userEmail,
+            @RequestHeader(value = "X-User-Role", required = false) String userRole) {
+
+        System.out.println("=== /auth/me ===");
+        System.out.println("X-User-Id: " + userEmail);
+        System.out.println("X-User-Role: " + userRole);
+
+        if (userEmail == null || userEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("No autenticado - falta header X-User-Id");
         }
 
-        String email = authentication.getName();
-        Optional<AuthUserEntity> userOptional = userRepository.findByEmail(email);
+        Optional<AuthUserEntity> userOptional = userRepository.findByEmail(userEmail);
 
         if (userOptional.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario no encontrado");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("Usuario no encontrado");
         }
 
         AuthUserEntity user = userOptional.get();
+
         return ResponseEntity.ok(Map.of(
                 "id", user.getId(),
                 "fullName", user.getFullName(),

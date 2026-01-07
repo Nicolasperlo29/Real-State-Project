@@ -11,13 +11,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/properties")
-@CrossOrigin(origins = "*") // permitir llamadas desde Angular
 @RequiredArgsConstructor
 public class PropertyController {
 
     private final PropertyServiceImpl service;
 
-    @GetMapping
+    @GetMapping("/list")
     public List<Property> getAll() {
         return service.getAllProperties();
     }

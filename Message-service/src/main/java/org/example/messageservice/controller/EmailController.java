@@ -18,13 +18,7 @@ public class EmailController {
 
     @PostMapping
     public ResponseEntity<String> sendEmail(@RequestBody ContactRequest request) {
-        try {
-            emailService.sendMessageToOwner(request);
-            return ResponseEntity.ok("Consulta enviada al propietario correctamente");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al enviar consulta: " + e.getMessage());
-        }
+        emailService.sendMessageToOwner(request);
+        return ResponseEntity.ok().build();
     }
 }

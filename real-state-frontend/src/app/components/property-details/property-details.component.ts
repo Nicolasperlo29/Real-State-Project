@@ -101,7 +101,7 @@ export class PropertyDetailsComponent implements OnInit {
         this.contactData = { name: '', email: '', phone: '', message: '' };
       },
       error: (err) => {
-        alert('Error al enviar el mensaje: ' + err.message);
+        console.log(err.message);
       }
     });
   }

@@ -9,7 +9,8 @@ import { UserWithFavorites } from '../interfaces/user-with-favorites';
 })
 export class UsuariosService {
 
-  private apiUrl = 'http://localhost:8082';
+  // private apiUrl = 'http://localhost:8082';
+  private apiUrl = 'http://localhost:8080';
 
   constructor(private http: HttpClient) { }
 
@@ -18,6 +19,6 @@ export class UsuariosService {
   }
 
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl + "/users");
+    return this.http.get<User[]>(this.apiUrl + "/users/all");
   }
 }

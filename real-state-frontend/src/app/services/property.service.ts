@@ -8,12 +8,13 @@ import { Property } from '../interfaces/property';
 })
 export class PropertyService {
 
-  private apiUrl = 'http://localhost:8083/properties';
+  // private apiUrl = 'http://localhost:8083/properties';
+  private apiUrl = 'http://localhost:8080/properties';
 
   constructor(private http: HttpClient) { }
 
   getAllProperties(): Observable<Property[]> {
-    return this.http.get<Property[]>(this.apiUrl);
+    return this.http.get<Property[]>(this.apiUrl + "/list");
   }
 
   getPropertyById(id: number): Observable<Property> {
