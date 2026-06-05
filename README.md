@@ -15,7 +15,6 @@ Plataforma **Real Estate** desarrollada con **arquitectura de microservicios**, 
 * **Spring Cloud** (Eureka Server, API Gateway)
 * **PostgreSQL**
 * **Docker / Docker Compose**
-* **WebSocket (STOMP)** para chat en tiempo real
 
 ### Frontend
 
