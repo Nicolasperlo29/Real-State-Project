@@ -3,6 +3,7 @@
 Plataforma **Real Estate** desarrollada con **arquitectura de microservicios**, orientada a la gestión de propiedades, usuarios, mensajería y agenda de turnos, con autenticación segura mediante **JWT**.
 
 ---
+<img width="1919" height="992" alt="Screenshot 2026-06-04 154757" src="https://github.com/user-attachments/assets/2e6097f1-8cb1-4531-847f-116a44031f8a" />
 
 ## 🚀 Tecnologías
 
