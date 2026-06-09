@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
                 savedUser.getRole()
         );
 
-//        rabbitTemplate.convertAndSend(exchange.getName(), "user.created", event);
+        rabbitTemplate.convertAndSend(exchange.getName(), "user.created", event);
         sendUserCreatedEvent(event); // se ejecuta en otro hilo
 
         // Retornar DTO

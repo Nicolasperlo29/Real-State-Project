@@ -1,118 +1,388 @@
-<body>
-
-    <section class="hero" id="inicio">
-        <div class="hero-content">
-            <h1>Elite Properties</h1>
-            <p>Residencias excepcionales para clientes distinguidos</p>
-            <div class="search-box">
-                <select [(ngModel)]="ciudadSeleccionada" id="ubicacion" class="form-control">
-                    <option value="" disabled selected>Selecciona una ciudad</option>
-                    <option *ngFor="let ciudad of ciudades" [value]="ciudad">{{ ciudad }}</option>
-                </select>
-                <button class="btn" onclick="buscar()">Explorar</button>
-            </div>
-        </div>
-        <div class="scroll-indicator"></div>
-    </section>
-
-    <section class="features" id="servicios">
-        <div class="features-container">
-            <h2 class="section-title">Nuestros Servicios</h2>
-            <p class="section-subtitle">Excelencia en cada detalle</p>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🏛️</div>
-                    <h3>Portfolio Selecto</h3>
-                    <p>Acceso exclusivo a propiedades únicas cuidadosamente seleccionadas en los mercados más
-                        prestigiosos del
-                        mundo.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚖️</div>
-                    <h3>Asesoría Legal</h3>
-                    <p>Soporte jurídico completo para garantizar transacciones seguras y transparentes en cada
-                        operación.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💎</div>
-                    <h3>Servicio Personalizado</h3>
-                    <p>Atención individual adaptada a sus necesidades específicas con el más alto nivel de
-                        profesionalismo.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🌍</div>
-                    <h3>Alcance Global</h3>
-                    <p>Red internacional de contactos y propiedades en las ciudades más exclusivas de cinco continentes.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="properties" id="propiedades">
-        <div class="properties-container">
-            <h2 class="section-title">Colección Destacada</h2>
-            <p class="section-subtitle">Residencias de distinción excepcional</p>
-
-            <div class="properties-grid">
-                @for (property of properties; track $index) {
-                <div class="property-card" [routerLink]="['/property', property.id]">
-                    <div class="property-image">
-                        <img [src]="property.images[0]?.url" [alt]="property.title" />
-                        <div class="property-badge">{{ property.status }}</div>
-                    </div>
-                    <div class="property-info">
-                        <div class="property-price">
-                            USD {{ property.price | number:'1.0-0' }}
-                        </div>
-                        <h3 class="property-title">{{ property.title }}</h3>
-                        <p class="property-location">
-                            📍 {{ property.address }}, {{ property.city }}
-                        </p>
-                        <div class="property-details">
-                            <span>{{ property.rooms }} dorm.</span>
-                            <span>{{ property.bathrooms }} Baños</span>
-                            <span>{{ property.areaTotal }}m² cubiertos</span>
-                        </div>
-                    </div>
-                </div>
-                }
-            </div>
-        </div>
-    </section>
-
-
-    <section class="cta-section">
-        <div class="cta-content">
-            <h2>Comience su Búsqueda</h2>
-            <p>Permítanos ayudarle a encontrar la propiedad perfecta que refleje su estilo de vida</p>
-            <button class="cta-btn" (click)="contactar()">Agendar Consulta</button>
-        </div>
-    </section>
-</body>
-
-@if (modal) {
-<div class="modal-backdrop">
-    <div class="modal-content">
-        <h1>Agendar Consulta</h1>
-        <form (ngSubmit)="agendarConsulta()" #consultaForm="ngForm">
-            <label for="asunto">Asunto (Opcional)</label>
-            <textarea id="asunto" name="asunto" [(ngModel)]="asunto"
-                placeholder="Contanos brevemente de qué te gustaría hablar con nuestro asesor..." rows="3">
-            </textarea>
-
-            <label for="fecha">Fecha</label>
-            <input type="date" id="fecha" name="fecha" [(ngModel)]="fecha" min="{{ today }}" required
-                (change)="cargarHorariosDisponibles()">
-
-            <label for="hora">Hora</label>
-            <select id="hora" name="hora" [(ngModel)]="hora" required>
-                <option *ngFor="let h of horariosDisponibles" [value]="h">{{ h }}</option>
-            </select>
-
-            <button type="submit" [disabled]="!consultaForm.form.valid">Agendar</button>
-            <button type="button" (click)="cerrarModal()">Cancelar</button>
-        </form>
+<!-- NAVBAR -->
+<nav class="navbar" [class.scrolled]="isScrolled">
+  <div class="nav-inner">
+    <div class="logo">
+      <span class="logo-mark">⬡</span>
+      <span class="logo-text">AUREUM</span>
     </div>
-</div>
+    <ul class="nav-links">
+      <li><a href="#properties">Propiedades</a></li>
+      <li><a href="#services">Servicios</a></li>
+      <li><a href="#about">Nosotros</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <button class="nav-cta">Agendar visita</button>
+    <button
+      class="hamburger"
+      (click)="toggleMenu()"
+      [class.open]="menuOpen"
+      aria-label="Menú"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" [class.open]="menuOpen">
+    <a href="#properties" (click)="toggleMenu()">Propiedades</a>
+    <a href="#services" (click)="toggleMenu()">Servicios</a>
+    <a href="#about" (click)="toggleMenu()">Nosotros</a>
+    <a href="#contact" (click)="toggleMenu()">Contacto</a>
+    <button class="nav-cta">Agendar visita</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <div class="hero-img"></div>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="dot"></span>
+      Propiedades Premium · Argentina
+    </div>
+
+    <h1 class="hero-title">
+      Encontrá tu<br />
+      <em>hogar ideal</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Descubrí las mejores oportunidades inmobiliarias.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-primary" (click)="scrollToSection('properties')">
+        Ver propiedades
+      </button>
+      <button class="btn-ghost" (click)="contactar()">Agendar consulta</button>
+    </div>
+  </div>
+
+  <div class="search-bar">
+    <div class="search-field">
+      <label for="ciudad-select">Ciudad</label>
+      <select id="ciudad-select" [(ngModel)]="ciudadSeleccionada">
+        <option value="">Selecciona una ciudad</option>
+        <option *ngFor="let ciudad of ciudades" [value]="ciudad">
+          {{ ciudad }}
+        </option>
+      </select>
+    </div>
+    <button class="search-btn" (click)="buscar()">Buscar</button>
+  </div>
+</section>
+
+<!-- FEATURED PROPERTIES -->
+<section class="properties" id="properties">
+  <div class="section-header">
+    <p class="section-tag">Destacadas</p>
+    <h2 class="section-title">Propiedades <span>seleccionadas</span></h2>
+  </div>
+
+  <div class="properties-grid">
+    @for (property of properties; track property.id) {
+      <div class="property-card" [routerLink]="['/property', property.id]">
+        <div class="card-image">
+          <img
+            [src]="getPropertyImage(property)"
+            [alt]="property.title"
+            loading="lazy"
+            (error)="$any($event.target).src = FALLBACK_IMAGE"
+          />
+          <span class="card-badge">{{ property.status }}</span>
+        </div>
+
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="card-location">{{ property.city }}</span>
+          </div>
+          <h3 class="card-title">{{ property.title }}</h3>
+          <div class="card-features">
+            <span
+              ><strong>{{ property.rooms }}</strong> amb.</span
+            >
+            <span
+              ><strong>{{ property.bathrooms }}</strong> baños</span
+            >
+            <span
+              ><strong>{{ property.areaTotal }}</strong> m²</span
+            >
+          </div>
+          <div class="card-footer">
+            <span class="card-price"
+              >USD {{ property.price | number: "1.0-0" }}</span
+            >
+            <button class="card-btn">Ver más →</button>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="services-inner">
+    <div class="services-left">
+      <p class="section-tag">Servicios</p>
+      <h2 class="section-title">Todo lo que<br /><span>necesitás</span></h2>
+      <p class="section-desc">
+        Te acompañamos en cada etapa: desde la búsqueda hasta la escritura. Con
+        asesoramiento real, no automatizado.
+      </p>
+      <button class="btn-primary" (click)="scrollToSection('contact')">
+        Consultar gratis
+      </button>
+    </div>
+    <div class="services-right">
+      <div class="service-item" *ngFor="let s of services; let i = index">
+        <div class="service-icon">{{ s.icon }}</div>
+        <div class="service-text">
+          <h3>{{ s.title }}</h3>
+          <p>{{ s.desc }}</p>
+        </div>
+        <span class="service-num">0{{ i + 1 }}</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="testimonials">
+  <div class="section-header light">
+    <p class="section-tag">Testimonios</p>
+    <h2 class="section-title">
+      Lo que dicen<br /><span>nuestros clientes</span>
+    </h2>
+  </div>
+  <div class="testimonials-track">
+    <div class="testimonial-card" *ngFor="let t of testimonials">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text">"{{ t.text }}"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" [style.background]="t.color">
+          {{ t.initials }}
+        </div>
+        <div>
+          <strong>{{ t.name }}</strong>
+          <span>{{ t.role }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT / NUMBERS -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div class="about-image">
+      <div class="about-img-main"></div>
+      <div class="about-img-accent"></div>
+      <div class="about-badge">
+        <strong>+15</strong>
+        <span>años de experiencia</span>
+      </div>
+    </div>
+    <div class="about-content">
+      <p class="section-tag">Nosotros</p>
+      <h2 class="section-title">
+        Expertos en el <span>mercado inmobiliario</span> argentino
+      </h2>
+      <p class="about-text">
+        Aureum nació con una misión clara: transformar la experiencia de
+        comprar, vender o alquilar una propiedad en Argentina. Creemos que cada
+        transacción merece atención personalizada, honestidad absoluta y
+        resultados concretos.
+      </p>
+      <div class="about-metrics">
+        <div class="metric" *ngFor="let m of metrics">
+          <strong>{{ m.value }}</strong>
+          <span>{{ m.label }}</span>
+        </div>
+      </div>
+      <button class="btn-primary">Conocer el equipo</button>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <p class="section-tag light">Contacto</p>
+      <h2 class="contact-title">
+        ¿Listo para dar<br />el <em>próximo paso</em>?
+      </h2>
+      <p>Nuestro equipo está disponible para asesorarte sin compromiso.</p>
+      <button class="btn-primary" (click)="contactar()">
+        Agendar consulta
+      </button>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span class="contact-icon">📞</span>
+          <span>+54 11 4567-8900</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">✉️</span>
+          <span>hola&#64;aureum.com.ar</span>
+        </div>
+        <div class="contact-item">
+          <span class="contact-icon">📍</span>
+          <span>Av. Santa Fe 1234, CABA</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative right panel -->
+    <div class="contact-visual">
+      <div class="contact-visual-inner">
+        <div class="cv-stat" *ngFor="let s of stats">
+          <strong>{{ s.value }}</strong>
+          <span>{{ s.label }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">
+        <span class="logo-mark">⬡</span>
+        <span class="logo-text">AUREUM</span>
+      </div>
+      <p>Conectando personas con propiedades excepcionales desde 2009.</p>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram">IG</a>
+        <a href="#" aria-label="Facebook">FB</a>
+        <a href="#" aria-label="LinkedIn">LN</a>
+        <a href="#" aria-label="WhatsApp">WA</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-col">
+        <h4>Propiedades</h4>
+        <a href="#">Casas en venta</a>
+        <a href="#">Departamentos</a>
+        <a href="#">Alquileres</a>
+        <a href="#">Terrenos</a>
+      </div>
+      <div class="footer-col">
+        <h4>Servicios</h4>
+        <a href="#">Tasación gratuita</a>
+        <a href="#">Asesoramiento legal</a>
+        <a href="#">Gestión de créditos</a>
+        <a href="#">Inversiones</a>
+      </div>
+      <div class="footer-col">
+        <h4>Empresa</h4>
+        <a href="#">Sobre Aureum</a>
+        <a href="#">Nuestro equipo</a>
+        <a href="#">Blog inmobiliario</a>
+        <a href="#">Trabaja con nosotros</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Aureum Real Estate. Todos los derechos reservados.</span>
+    <div>
+      <a href="#">Privacidad</a>
+      <a href="#">Términos</a>
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL — al nivel del componente, fuera de cualquier grid -->
+@if (modal) {
+  <div
+    class="modal-backdrop"
+    (click)="cerrarModalPorBackdrop($event)"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+  >
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Agendar Consulta</h2>
+        <button class="modal-close" (click)="cerrarModal()" aria-label="Cerrar">
+          ✕
+        </button>
+      </div>
+
+      <form (ngSubmit)="agendarConsulta()" #consultaForm="ngForm" novalidate>
+        <div class="form-group">
+          <label for="asunto"
+            >Asunto <span class="optional">(Opcional)</span></label
+          >
+          <textarea
+            id="asunto"
+            name="asunto"
+            [(ngModel)]="asunto"
+            placeholder="Contanos brevemente de qué te gustaría hablar con nuestro asesor..."
+            rows="3"
+          >
+          </textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="fecha">Fecha <span class="required">*</span></label>
+          <input
+            type="date"
+            id="fecha"
+            name="fecha"
+            [(ngModel)]="fecha"
+            [min]="today"
+            required
+            (change)="cargarHorariosDisponibles()"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="hora">Horario <span class="required">*</span></label>
+          <select
+            id="hora"
+            name="hora"
+            [(ngModel)]="hora"
+            required
+            [disabled]="!horariosDisponibles.length || loadingHorarios"
+          >
+            <option value="" disabled>
+              {{
+                loadingHorarios
+                  ? "Cargando horarios..."
+                  : "Seleccioná un horario"
+              }}
+            </option>
+            <option *ngFor="let h of horariosDisponibles" [value]="h">
+              {{ h }}
+            </option>
+          </select>
+          <p class="field-hint" *ngIf="loadingHorarios">
+            Verificando disponibilidad...
+          </p>
+        </div>
+
+        <div class="modal-actions">
+          <button
+            type="button"
+            class="btn-modal-cancel"
+            (click)="cerrarModal()"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="!consultaForm.form.valid || loadingHorarios"
+          >
+            Agendar
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 }
